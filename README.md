@@ -1,4 +1,4 @@
 simplify-opencart-module
 ========================
 
-OpenCard payment module for Simplify Commerce
+OpenCart payment module for Simplify Commerce
