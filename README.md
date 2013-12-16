@@ -5,7 +5,7 @@ This plugin adds Simplify Commerce as a payment option on your OpenCart checkout
 
 ## Installation
 1. Make a backup of your site before applying new mods etc. 
-2. Download and unzip the module source
+2. ![Download and unzip the module source ](https://github.com/simplifycom/simplify-opencart-module/releases/download/v1.0.0/simplifycommerce-opencart.zip)
 3. Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. These are new files and no files should be overwritten.  Windows will merge folders of the same name.  For Mac you can use this command line command: cp -R -v
 4. Enable the extension by going to "Extensions > Payments > Simplify Commerce click "Install" and then "Edit". Enter all the mandetory fields. Click Save.
 
