@@ -5,6 +5,7 @@
 class ControllerPaymentSimplifyCommerce extends Controller {
 	protected function index() {
 		$this->language->load('payment/simplifycommerce');
+		$this->load->model('checkout/order');
 
 		$this->data['text_title'] = htmlentities($this->config->get('simplifycommerce_title'));
 		$this->data['text_payment_title'] = "Pay by  " .  $this->config->get('simplifycommerce_title');
