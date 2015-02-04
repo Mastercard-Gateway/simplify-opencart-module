@@ -3,6 +3,11 @@
 
 This plugin adds Simplify Commerce as a payment option on your OpenCart checkout page.
 
+## Compatibility
+Versions v1.0.0 to v1.0.4 of this module are compatible with OpenCart versions up to 1.5.6.4.
+
+Version v1.0.5 is compatible with OpenCart 2.0 (tested with v2.0.1.1)
+
 ## Installation
 1. Make a backup of your site before applying new mods etc. 
 2. [Download and unzip the latest release](https://github.com/simplifycom/simplify-opencart-module/releases/latest)
