@@ -14,19 +14,19 @@ class ModelPaymentSimplifyCommerce extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
-		
+		}
+
 		$method_data = array();
-	
+
 		if ($status) {  
-      		$method_data = array(
-        		'code'       => 'simplifycommerce',
-        		'title'      => $this->config->get('simplifycommerce_title'),
+			$method_data = array(
+				'code'       => 'simplifycommerce',
+				'title'      => $this->config->get('simplifycommerce_title'),
+				'terms'      => '',
 				'sort_order' => $this->config->get('simplifycommerce_sort_order')
-      		);
-    	}
-   
-    	return $method_data;
-  	}
+			);
+		}
+		return $method_data;
+	}
 }
 ?>
