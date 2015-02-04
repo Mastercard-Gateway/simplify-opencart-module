@@ -1,3 +1,6 @@
+<?php if ($simplifycommerce_payment_mode) { /* hosted payments mode */ ?>
+<script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
+<?php } else { /* standard mode */ ?>
 <script type="text/javascript" src="https://www.simplify.com/commerce/v1/simplify.js"></script>
 <div class="form-horizontal" id="payment">
     <fieldset>
@@ -39,12 +42,29 @@
         </div>
         <div id="sc_error"></div>
     </fieldset>
+<?php } ?>
 	<div class="buttons">
 	  <div class="pull-right">
+<?php if ($simplifycommerce_payment_mode) { ?>
+            <button id="simplify-button"
+                    class="button"
+                    data-sc-key="<?php echo $pub_key; ?>"
+                    data-name="<?php echo $store_name; ?>"
+                    data-reference="<?php echo $description; ?>"
+                    data-amount="<?php echo $amount; ?>"
+                    data-operation="create.token"
+                    data-receipt="false"
+                    data-redirect-url="<?php echo $redirect_url ?>"
+                    >
+            <?php echo $button_pay; ?>
+            </button>
+<?php } else { ?>
           <input type="button" value="<?php echo $button_pay; ?>" id="button-pay" class="btn btn-primary" />
+<?php } ?>
 	  </div>
 	</div>
 </div>
+<?php if (!$simplifycommerce_payment_mode) { ?>
 <script type="text/javascript">
 
 	var SimplifyCommerceHandler = function(){
@@ -135,3 +155,4 @@
 	  });
 	});
 </script>
+<?php } ?>

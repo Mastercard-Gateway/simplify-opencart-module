@@ -103,6 +103,12 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 			$data['simplifycommerce_test'] = $this->config->get('simplifycommerce_test'); 
 		}
 
+		if (isset($this->request->post['simplifycommerce_payment_mode'])) {
+		    $data['simplifycommerce_payment_mode'] = trim($this->request->post['simplifycommerce_payment_mode']);
+		} else {
+		    $data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
+		}
+
 		if (isset($this->request->post['simplifycommerce_livesecretkey'])) {
 			$data['simplifycommerce_livesecretkey'] = trim($this->request->post['simplifycommerce_livesecretkey']);
 		} else {
