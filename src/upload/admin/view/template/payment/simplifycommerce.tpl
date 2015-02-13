@@ -58,6 +58,22 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label" for="simplifycommerce_button_color"><?php echo $entry_button_color; ?></label>
+                        <div class="col-sm-10">
+                            <input type='text' id="simplifycommerce_button_color" name="simplifycommerce_button_color" value="<?php echo $simplifycommerce_button_color; ?>"/>
+                            <script>
+                                $("#simplifycommerce_button_color").spectrum({
+                                    showInput: true,
+                                    preferredFormat: "hex",
+                                    clickoutFiresChange: true
+                                });
+                            </script>
+                        </div>
+                        <?php if ($error_button_color) { ?>
+                        <div class="text-danger"><?php echo $error_button_color; ?></div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label" for="livesecretkey"><?php echo $entry_livesecretkey; ?></label>
                         <div class="col-sm-10">
                             <input type="password" name="simplifycommerce_livesecretkey" value="<?php echo $simplifycommerce_livesecretkey; ?>" class="form-control" id="livesecretkey"/>

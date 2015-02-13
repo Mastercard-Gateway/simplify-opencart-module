@@ -35,6 +35,7 @@ $_['entry_webhook_url']     		= 'Webhook URL:';
 $_['entry_webhook_url_help']     	= 'Add this URL in your Simplify Commerce Account at: Your Account->Web Hooks';
 $_['entry_test']					= 'Account Mode:';
 $_['entry_payment_mode']            = 'Payment Mode:';
+$_['entry_button_color']            = 'Hosted Payments Button Color:';
 $_['entry_order_status'] 			= 'Successful Order Status:';
 $_['entry_declined_order_status'] 	= 'Declined Order Status:';
 $_['entry_geo_zone']     			= 'Geo Zone:';
@@ -43,11 +44,12 @@ $_['entry_sort_order']   			= 'Sort Order:';
 
 // Error
 $_['error_permission']   			= 'Warning: You do not have permission to modify payment Simplify Commerce!';
-$_['error_livesecretkey']     		= 'Live Private API Key Required';
-$_['error_livepubkey']     			= 'Live Public API Key Required';
-$_['error_testsecretkey']     		= 'Sandbox Private API Key Required';
-$_['error_testpubkey']     			= 'Sandbox Public API Key Required';
-$_['error_title']     				= 'Payment Title Required';
+$_['error_livesecretkey']     		= 'Valid live private API key required';
+$_['error_livepubkey']     			= 'Valid live public API Key required';
+$_['error_testsecretkey']     		= 'Valid sandbox private API key required';
+$_['error_testpubkey']     			= 'Valid sandbox public API key required';
+$_['error_title']     				= 'Payment Title required';
+$_['error_button_color']            = 'Invalid button color. Should be in hex color format, i.e. #AABBCC';
 
 //Button
 $_['button_save']   				= 'Save';

@@ -47,7 +47,7 @@
 	  <div class="pull-right">
 <?php if ($simplifycommerce_payment_mode) { ?>
             <button id="simplify-button"
-                    class="button"
+                    data-color="<?php echo $button_color?>"
                     data-sc-key="<?php echo $pub_key; ?>"
                     data-name="<?php echo $store_name; ?>"
                     data-reference="<?php echo $description; ?>"

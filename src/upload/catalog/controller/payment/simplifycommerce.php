@@ -28,6 +28,8 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		}		
 		
 		$data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
+		
+		$data['button_color'] = $this->config->get('simplifycommerce_button_color');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 

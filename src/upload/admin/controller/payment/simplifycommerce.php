@@ -11,6 +11,8 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		$this->load->language('payment/simplifycommerce');
 
 		$this->document->setTitle($this->language->get('heading_title'));
+		$this->document->addScript('view/javascript/simplifycommerce/spectrum.js');
+		$this->document->addStyle('view/javascript/simplifycommerce/spectrum.css');
 		
 		$this->load->model('setting/setting');
 			
@@ -53,6 +55,7 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		$data['entry_webhook_url_help'] = $this->language->get('entry_webhook_url_help');
 		$data['entry_test'] = $this->language->get('entry_test');
 		$data['entry_payment_mode'] = $this->language->get('entry_payment_mode');
+		$data['entry_button_color'] = $this->language->get('entry_button_color');
 		$data['entry_order_status'] = $this->language->get('entry_order_status');
 		$data['entry_declined_order_status'] = $this->language->get('entry_declined_order_status');	
 		$data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
@@ -69,7 +72,8 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 			'livepubkey',
 			'testsecretkey',
 			'testpubkey',
-			'title'
+			'title',
+			'button_color'
 		);
 
 		foreach($err_arr as $val){
@@ -107,6 +111,17 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		    $data['simplifycommerce_payment_mode'] = trim($this->request->post['simplifycommerce_payment_mode']);
 		} else {
 		    $data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
+		}
+		
+		if (isset($this->request->post['simplifycommerce_button_color'])) {
+			$data['simplifycommerce_button_color'] = trim($this->request->post['simplifycommerce_button_color']);
+		} else {
+			$data['simplifycommerce_button_color'] = $this->config->get('simplifycommerce_button_color');
+		}
+
+		// set to light blue if not set
+		if(!$data['simplifycommerce_button_color']){
+			$data['simplifycommerce_button_color'] = "#1f90bb";
 		}
 
 		if (isset($this->request->post['simplifycommerce_livesecretkey'])) {
@@ -198,6 +213,14 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		$this->response->setOutput($this->load->view('payment/simplifycommerce.tpl', $data));
 	}
 
+	private function testRegex($param, $regex){
+		$this->request->post['simplifycommerce_' . $param] = $val = trim($this->request->post['simplifycommerce_' . $param]);
+		if(!$val || $val && !preg_match($regex, $val)){
+			$this->error[$param] = $this->language->get('error_' . $param);
+		}
+		return;
+	}
+
 	private function validate() {
 		if (!$this->user->hasPermission('modify', 'payment/simplifycommerce')) {
 			$this->error['warning'] = $this->language->get('error_permission');
@@ -206,23 +229,15 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 		if (!$this->request->post['simplifycommerce_title']) {
 			$this->error['title'] = $this->language->get('error_title');
 		}
-		
-		if (!$this->request->post['simplifycommerce_testsecretkey']) {
-			$this->error['testsecretkey'] = $this->language->get('error_testsecretkey');
-		}
-		
-		if (!$this->request->post['simplifycommerce_testpubkey']) {
-			$this->error['testpubkey'] = $this->language->get('error_testpubkey');
-		}
+		$this->testRegex('button_color', "/^#[0-9a-fA-F]{6}$/");
+
+		$this->testRegex('testsecretkey', "/^[a-zA-Z0-9\/=+]{10,}$/");
+		$this->testRegex('testpubkey', "/^sbpb_.*$/");
 
 		// If in live mode, check that we have private and pub live keys
 		if(!$this->request->post['simplifycommerce_test']){
-			if(!$this->request->post['simplifycommerce_livesecretkey']){
-				$this->error['livesecretkey'] = $this->language->get('error_livesecretkey');
-			}
-			if(!$this->request->post['simplifycommerce_livepubkey']){
-				$this->error['livepubkey'] = $this->language->get('error_livepubkey');
-			}
+			$this->testRegex('livesecretkey',"/^[a-zA-Z0-9\/=+]{10,}$/");
+			$this->testRegex('livepubkey',"/^lvpb_.*$/");
 		}
 		return !$this->error;
 	}
