@@ -42,6 +42,38 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label" for="payment-mode"><?php echo $entry_payment_mode; ?></label>
+                        <div class="col-sm-10">
+                            <?php if ($simplifycommerce_payment_mode) { ?>
+                            <input type="radio" name="simplifycommerce_payment_mode" value="1" checked="checked" />
+                            <?php echo $text_payment_hosted; ?>
+                            <input type="radio" name="simplifycommerce_payment_mode" value="0" />
+                            <?php echo $text_payment_standard; ?>
+                            <?php } else { ?>
+                            <input type="radio" name="simplifycommerce_payment_mode" value="1" />
+                            <?php echo $text_payment_hosted; ?>
+                            <input type="radio" name="simplifycommerce_payment_mode" value="0" checked="checked" />
+                            <?php echo $text_payment_standard; ?>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="simplifycommerce_button_color"><?php echo $entry_button_color; ?></label>
+                        <div class="col-sm-10">
+                            <input type='text' id="simplifycommerce_button_color" name="simplifycommerce_button_color" value="<?php echo $simplifycommerce_button_color; ?>"/>
+                            <script>
+                                $("#simplifycommerce_button_color").spectrum({
+                                    showInput: true,
+                                    preferredFormat: "hex",
+                                    clickoutFiresChange: true
+                                });
+                            </script>
+                        </div>
+                        <?php if ($error_button_color) { ?>
+                        <div class="text-danger"><?php echo $error_button_color; ?></div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label" for="livesecretkey"><?php echo $entry_livesecretkey; ?></label>
                         <div class="col-sm-10">
                             <input type="password" name="simplifycommerce_livesecretkey" value="<?php echo $simplifycommerce_livesecretkey; ?>" class="form-control" id="livesecretkey"/>

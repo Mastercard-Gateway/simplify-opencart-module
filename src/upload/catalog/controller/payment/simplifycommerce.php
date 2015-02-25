@@ -27,6 +27,9 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 			$data['pub_key'] = trim($this->config->get('simplifycommerce_livepubkey'));
 		}		
 		
+		$data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
+		
+		$data['button_color'] = $this->config->get('simplifycommerce_button_color');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -144,18 +147,34 @@ class ControllerPaymentSimplifyCommerce extends Controller {
 			} else {
 				$mess = $e->getMessage();
 			}
-			$json['error'] = $mess;
-			echo json_encode($json);
-			exit();
+			if($this->config->get("simplifycommerce_payment_mode")){
+				$this->session->data['error'] = $mess;
+				return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
+			} else {
+				$json['error'] = $mess;
+				echo json_encode($json);
+				exit();
+			}
 		} catch (Exception  $e) {
 			$this->log->write($e->getMessage());
-			$json['error'] = $e->getMessage();
-			echo json_encode($json);
-			exit();
+			if($this->config->get("simplifycommerce_payment_mode")){
+				$this->session->data['error'] = $e->getMessage();
+				return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
+			} else {
+				$json['error'] = $e->getMessage();
+				echo json_encode($json);
+				exit();
+			}
 		}
 
-		$json['success'] = $this->url->link('checkout/success');
-		echo json_encode($json);
+		if($this->config->get("simplifycommerce_payment_mode")){
+			//hosted payments
+			return $this->response->redirect($this->url->link('checkout/success'));
+		} else {
+			//standard payments mode
+			$json['success'] = $this->url->link('checkout/success');
+			echo json_encode($json);
+		}
  	}
 
 	public function callback() {
