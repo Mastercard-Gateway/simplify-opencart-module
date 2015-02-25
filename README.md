@@ -8,7 +8,7 @@ Versions v1.0.0 to v1.0.4 of this module are compatible with OpenCart versions u
 
 Versions v1.0.5 and up is compatible with OpenCart 2.0 (tested with v2.0.1.1)
 
-Version v1.0.6 Adds Hosted Payments mode.
+Version v1.1.0 Adds Hosted Payments mode.
 
 ## Installation
 1. Make a backup of your site before applying new mods etc. 
