@@ -104,6 +104,7 @@
 				resetErrors();
 				if (response.error) {
 				    $('#button-pay').attr("disabled", false);
+				    $('#button-pay').button('reset');
 				    displayError(response.error)
 
 				} else {
@@ -134,25 +135,24 @@
 		}
 	}();
 
+      $(document).ready(function() {
+        var action = function(event) {
+          $('#button-pay').attr("disabled", true);
+          SimplifyCommerce.generateToken({
+              key: "<?php echo $pub_key; ?>",
+              card: {
+                  number: $('#entry_card_number').val(),
+                  cvc: $('#entry_cvc').val(),
+                  expMonth: $('#entry_card_month').val(),
+                  expYear: $('#entry_card_year').val()
+              }
+          }, SimplifyCommerceHandler.handle);
 
-
-	$(document).ready(function() {
-	  $("#button-pay").mousedown(function(event) {
-
-	    $('#button-pay').attr("disabled", true);
-	    SimplifyCommerce.generateToken({
-	        key: "<?php echo $pub_key; ?>",
-	        card: {
-	            number: $('#entry_card_number').val(),
-	            cvc: $('#entry_cvc').val(),
-	            expMonth: $('#entry_card_month').val(),
-	            expYear: $('#entry_card_year').val()
-	        }
-	    }, SimplifyCommerceHandler.handle);
-
-	    // prevent the form from submitting with the default action
-	    return false;
-	  });
-	});
+          // prevent the form from submitting with the default action
+          return false;
+        };
+        $("#button-pay").click(action); // some themes expect click event
+        $("#button-pay").mousedown(action); // for legacy
+      });
 </script>
 <?php } ?>
