@@ -74,6 +74,13 @@
 			$('.entry_card_month_error').remove();
 		};
 
+		var ajaxDoneHooks = function(){
+			$('#button-pay').button('reset');
+			if(typeof triggerLoadingOff !== "undefined"){
+				triggerLoadingOff(); // fix for "Journal - Advanced Opencart Theme"
+			}
+		}
+
 		var displayError = function(error){
 
 			switch (error.code) {
@@ -103,9 +110,10 @@
 
 				resetErrors();
 				if (response.error) {
+
 					$('#button-pay').attr("disabled", false);
-					$('#button-pay').button('reset');
 					displayError(response.error)
+					ajaxDoneHooks();
 
 				} else {
 
@@ -118,7 +126,7 @@
 							$('#button-pay').button('loading');
 						},
 						complete: function() {
-							$('#button-pay').button('reset');
+							ajaxDoneHooks();
 						},
 						success: function(response) {
 							if (response['error']) {
@@ -130,6 +138,7 @@
 							}
 						}
 					});
+
 				}
 			}
 		}
