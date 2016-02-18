@@ -3,63 +3,63 @@
 <?php } else { /* standard mode */ ?>
 <script type="text/javascript" src="https://www.simplify.com/commerce/v1/simplify.js"></script>
 <div class="form-horizontal" id="payment">
-    <fieldset>
-        <legend><?php echo $text_card_details; ?></legend>
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="entry_name_on_card"><?php echo $entry_name_on_card; ?></label>
-            <div class="col-sm-10">
-                <input type="text" name="entry_name_on_card" value="" placeholder="<?php echo $entry_name_on_card; ?>" id="entry_name_on_card" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="entry_card_number"><?php echo $entry_card_number; ?></label>
-            <div class="col-sm-10">
-                <input type="text" name="entry_card_number" value="" placeholder="<?php echo $entry_card_number; ?>" id="entry_card_number" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="entry_card_month"><?php echo $entry_card_expiration; ?></label>
-            <div class="col-sm-3">
-                <select name="entry_card_month" id="entry_card_month" class="form-control">
-                    <?php foreach ($months as $month) { ?>
-                    <option value="<?php echo $month['value']; ?>"><?php echo $month['text']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <div class="col-sm-3">
-                <select name="entry_card_year" id="entry_card_year" class="form-control">
-                    <?php foreach ($year_expire as $year) { ?>
-                    <option value="<?php echo $year['value']; ?>"><?php echo $year['text']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="entry_cvc"><?php echo $entry_cvc; ?></label>
-            <div class="col-sm-10">
-                <input type="text" name="entry_cvc" value="" placeholder="<?php echo $entry_cvc; ?>" id="entry_cvc" class="form-control" />
-            </div>
-        </div>
-        <div id="sc_error"></div>
-    </fieldset>
+	<fieldset>
+		<legend><?php echo $text_card_details; ?></legend>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="entry_name_on_card"><?php echo $entry_name_on_card; ?></label>
+			<div class="col-sm-10">
+				<input type="text" name="entry_name_on_card" value="" placeholder="<?php echo $entry_name_on_card; ?>" id="entry_name_on_card" class="form-control" />
+			</div>
+		</div>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="entry_card_number"><?php echo $entry_card_number; ?></label>
+			<div class="col-sm-10">
+				<input type="text" name="entry_card_number" value="" placeholder="<?php echo $entry_card_number; ?>" id="entry_card_number" class="form-control" />
+			</div>
+		</div>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="entry_card_month"><?php echo $entry_card_expiration; ?></label>
+			<div class="col-sm-3">
+				<select name="entry_card_month" id="entry_card_month" class="form-control">
+					<?php foreach ($months as $month) { ?>
+					<option value="<?php echo $month['value']; ?>"><?php echo $month['text']; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="col-sm-3">
+				<select name="entry_card_year" id="entry_card_year" class="form-control">
+					<?php foreach ($year_expire as $year) { ?>
+					<option value="<?php echo $year['value']; ?>"><?php echo $year['text']; ?></option>
+					<?php } ?>
+				</select>
+			</div>
+		</div>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="entry_cvc"><?php echo $entry_cvc; ?></label>
+			<div class="col-sm-10">
+				<input type="text" name="entry_cvc" value="" placeholder="<?php echo $entry_cvc; ?>" id="entry_cvc" class="form-control" />
+			</div>
+		</div>
+		<div id="sc_error"></div>
+	</fieldset>
 <?php } ?>
 	<div class="buttons">
 	  <div class="pull-right">
 <?php if ($simplifycommerce_payment_mode) { ?>
-            <button id="simplify-button"
-                    data-color="<?php echo $button_color?>"
-                    data-sc-key="<?php echo $pub_key; ?>"
-                    data-name="<?php echo $store_name; ?>"
-                    data-reference="<?php echo $description; ?>"
-                    data-amount="<?php echo $amount; ?>"
-                    data-operation="create.token"
-                    data-receipt="false"
-                    data-redirect-url="<?php echo $redirect_url ?>"
-                    >
-            <?php echo $button_pay; ?>
-            </button>
+			<button id="simplify-button"
+					data-color="<?php echo $button_color?>"
+					data-sc-key="<?php echo $pub_key; ?>"
+					data-name="<?php echo $store_name; ?>"
+					data-reference="<?php echo $description; ?>"
+					data-amount="<?php echo $amount; ?>"
+					data-operation="create.token"
+					data-receipt="false"
+					data-redirect-url="<?php echo $redirect_url ?>"
+					>
+			<?php echo $button_pay; ?>
+			</button>
 <?php } else { ?>
-          <input type="button" value="<?php echo $button_pay; ?>" id="button-pay" class="btn btn-primary" />
+		  <input type="button" value="<?php echo $button_pay; ?>" id="button-pay" class="btn btn-primary" />
 <?php } ?>
 	  </div>
 	</div>
@@ -69,32 +69,32 @@
 
 	var SimplifyCommerceHandler = function(){
 
-	    var resetErrors = function(){
+		var resetErrors = function(){
 			$('.entry_card_number_error').remove();
 			$('.entry_card_month_error').remove();
 		};
 
 		var displayError = function(error){
 
-            switch (error.code) {
-                case 'validation':
-                    for (var i = 0 ; i < error.fieldErrors.length; i++) {
-        				var field = error.fieldErrors[i].field;
-        				var errmsg = error.fieldErrors[i].message;
+			switch (error.code) {
+				case 'validation':
+					for (var i = 0 ; i < error.fieldErrors.length; i++) {
+						var field = error.fieldErrors[i].field;
+						var errmsg = error.fieldErrors[i].message;
 
-        				if (field == 'card.number') {
-		        			$('#entry_card_number').after('<div class="text-danger entry_card_number_error">' + errmsg + '</span>');
-        				}
-        				if (field == 'card.expMonth' || field == 'card.expYear') {
-           					$('.entry_card_month_error').remove()
-        					$('#entry_card_month').after('<div class="text-danger entry_card_month_error">' + errmsg + '</span>');
-        				}
-                    }
-                    break;
-                default:
-		        	$('#sc_error').after('<div class="text-danger entry_card_number_error">' + error.message + '</span>');
-                    break;
-            }
+						if (field == 'card.number') {
+							$('#entry_card_number').after('<div class="text-danger entry_card_number_error">' + errmsg + '</span>');
+						}
+						if (field == 'card.expMonth' || field == 'card.expYear') {
+							$('.entry_card_month_error').remove()
+							$('#entry_card_month').after('<div class="text-danger entry_card_month_error">' + errmsg + '</span>');
+						}
+					}
+					break;
+				default:
+					$('#sc_error').after('<div class="text-danger entry_card_number_error">' + error.message + '</span>');
+					break;
+			}
 		};
 
 		return{
@@ -103,13 +103,13 @@
 
 				resetErrors();
 				if (response.error) {
-				    $('#button-pay').attr("disabled", false);
-				    $('#button-pay').button('reset');
-				    displayError(response.error)
+					$('#button-pay').attr("disabled", false);
+					$('#button-pay').button('reset');
+					displayError(response.error)
 
 				} else {
 
-				    $.ajax({
+					$.ajax({
 						url: 'index.php?route=payment/simplifycommerce/charge',
 						type: 'post',
 						dataType: 'json',
@@ -135,24 +135,24 @@
 		}
 	}();
 
-      $(document).ready(function() {
-        var action = function(event) {
-          $('#button-pay').attr("disabled", true);
-          SimplifyCommerce.generateToken({
-              key: "<?php echo $pub_key; ?>",
-              card: {
-                  number: $('#entry_card_number').val(),
-                  cvc: $('#entry_cvc').val(),
-                  expMonth: $('#entry_card_month').val(),
-                  expYear: $('#entry_card_year').val()
-              }
-          }, SimplifyCommerceHandler.handle);
+	$(document).ready(function() {
+		var action = function(event) {
+			$('#button-pay').attr("disabled", true);
+			SimplifyCommerce.generateToken({
+				key: "<?php echo $pub_key; ?>",
+				card: {
+					number: $('#entry_card_number').val(),
+					cvc: $('#entry_cvc').val(),
+					expMonth: $('#entry_card_month').val(),
+					expYear: $('#entry_card_year').val()
+				  }
+			}, SimplifyCommerceHandler.handle);
 
-          // prevent the form from submitting with the default action
-          return false;
-        };
-        $("#button-pay").click(action); // some themes expect click event
-        $("#button-pay").mousedown(action); // for legacy
-      });
+			// prevent the form from submitting with the default action
+			return false;
+		};
+		$("#button-pay").click(action); // some themes expect click event
+		$("#button-pay").mousedown(action); // for legacy
+	  });
 </script>
 <?php } ?>
