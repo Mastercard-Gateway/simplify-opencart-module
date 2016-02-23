@@ -67,6 +67,12 @@
 <?php if (!$simplifycommerce_payment_mode) { ?>
 <script type="text/javascript">
 
+	var SimplifyAjaxDoneHooks = function(){
+		$('#button-pay').button('reset');
+		if(typeof triggerLoadingOff !== "undefined"){
+			triggerLoadingOff(); // fix for "Journal - Advanced Opencart Theme"
+		}
+	};
 	var SimplifyCommerceHandler = function(){
 
 		var resetErrors = function(){
@@ -75,13 +81,6 @@
 			$(".entry_name_on_card_error").remove();
 			$(".entry_cvc_error").remove();
 		};
-
-		var ajaxDoneHooks = function(){
-			$('#button-pay').button('reset');
-			if(typeof triggerLoadingOff !== "undefined"){
-				triggerLoadingOff(); // fix for "Journal - Advanced Opencart Theme"
-			}
-		}
 
 		var displayError = function(error){
 
@@ -122,8 +121,8 @@
 				if (response.error) {
 
 					$('#button-pay').attr("disabled", false);
-					displayError(response.error)
-					ajaxDoneHooks();
+					displayError(response.error);
+					SimplifyAjaxDoneHooks();
 
 				} else {
 					$.ajax({
@@ -135,7 +134,7 @@
 							$('#button-pay').button('loading');
 						},
 						complete: function() {
-							ajaxDoneHooks();
+							SimplifyAjaxDoneHooks();
 						},
 						success: function(response) {
 							if (response['error']) {
@@ -157,8 +156,8 @@
 		var action = function(event) {
 			$(".entry_cvc_error").remove();
 			if($.trim($('#entry_cvc').val()) == ""){
-				$('#entry_cvc').after('<div class="text-danger entry_cvc_error">Field required</span>');
-				ajaxDoneHooks();
+				$('#entry_cvc').after('<div class="text-danger entry_cvc_error">Field is required</span>');
+				SimplifyAjaxDoneHooks();
 				return false;
 			}
 			$('#button-pay').attr("disabled", true);
