@@ -72,6 +72,8 @@
 		var resetErrors = function(){
 			$('.entry_card_number_error').remove();
 			$('.entry_card_month_error').remove();
+			$(".entry_name_on_card_error").remove();
+			$(".entry_cvc_error").remove();
 		};
 
 		var ajaxDoneHooks = function(){
@@ -90,11 +92,19 @@
 						var errmsg = error.fieldErrors[i].message;
 
 						if (field == 'card.number') {
-							$('#entry_card_number').after('<div class="text-danger entry_card_number_error">' + errmsg + '</span>');
+							if(! $('.entry_card_number_error').length){
+								$('#entry_card_number').after('<div class="text-danger entry_card_number_error">Enter a valid card number</span>');
+							}
 						}
 						if (field == 'card.expMonth' || field == 'card.expYear') {
 							$('.entry_card_month_error').remove()
 							$('#entry_card_month').after('<div class="text-danger entry_card_month_error">' + errmsg + '</span>');
+						}
+						if(field == 'card.name'){
+							$('#entry_name_on_card').after('<div class="text-danger entry_name_on_card_error">' + errmsg + '</span>');
+						}
+						if(field == 'card.cvc'){
+							$('#entry_cvc').after('<div class="text-danger entry_cvc_error">' + errmsg + '</span>');
 						}
 					}
 					break;
@@ -116,7 +126,6 @@
 					ajaxDoneHooks();
 
 				} else {
-
 					$.ajax({
 						url: 'index.php?route=payment/simplifycommerce/charge',
 						type: 'post',
@@ -146,10 +155,17 @@
 
 	$(document).ready(function() {
 		var action = function(event) {
+			$(".entry_cvc_error").remove();
+			if($.trim($('#entry_cvc').val()) == ""){
+				$('#entry_cvc').after('<div class="text-danger entry_cvc_error">Field required</span>');
+				ajaxDoneHooks();
+				return false;
+			}
 			$('#button-pay').attr("disabled", true);
 			SimplifyCommerce.generateToken({
 				key: "<?php echo $pub_key; ?>",
 				card: {
+					name: $('#entry_name_on_card').val(),
 					number: $('#entry_card_number').val(),
 					cvc: $('#entry_cvc').val(),
 					expMonth: $('#entry_card_month').val(),
@@ -160,8 +176,7 @@
 			// prevent the form from submitting with the default action
 			return false;
 		};
-		$("#button-pay").click(action); // some themes expect click event
-		$("#button-pay").mousedown(action); // for legacy
+		$("#button-pay").click(action);
 	  });
 </script>
 <?php } ?>
