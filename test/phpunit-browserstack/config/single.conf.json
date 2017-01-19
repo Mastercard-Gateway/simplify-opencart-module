@@ -1,0 +1,16 @@
+{
+  "server": "hub-cloud.browserstack.com",
+  "user": "simplifydev1",
+  "key": "oJwsFx4PWsmQEQn5qfea",
+
+  "capabilities": {
+    "build": "opencart-plugin-tests",
+    "name": "simplify_opencart_plugin_test",
+    "project": "simplify-opencart-module",
+    "browserstack.debug": true
+  },
+
+  "environments": [{
+    "browser": "chrome"
+  }]
+}

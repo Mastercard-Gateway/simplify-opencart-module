@@ -1,0 +1,18 @@
+{
+  "require": {
+    "browserstack/browserstack-local": "dev-master",
+    "phpunit/phpunit-selenium": "*",
+    "facebook/webdriver": "dev-master"
+  },
+  "scripts": {
+    "test": "php composer.phar extension_payment_admin && php composer.phar standard_payment_checkout && php composer.phar hosted_payment_checkout",
+    "single": "vendor/bin/phpunit tests/single_test.php",
+    "extension_payment_admin": "CONFIG_FILE=config/local.conf.json vendor/bin/phpunit tests/admin/ExtensionPaymentAdminTest.php",
+    "standard_payment_checkout": "CONFIG_FILE=config/local.conf.json vendor/bin/phpunit tests/payment/StandardPaymentCheckoutTest.php",
+    "hosted_payment_checkout": "CONFIG_FILE=config/local.conf.json vendor/bin/phpunit tests/payment/HostedPaymentCheckoutTest.php",
+    "parallel": "CONFIG_FILE=config/parallel.conf.json /usr/bin/env php lib/parallel.php"
+  },
+  "autoload": {
+    "classmap": ["lib/"]
+  }
+}

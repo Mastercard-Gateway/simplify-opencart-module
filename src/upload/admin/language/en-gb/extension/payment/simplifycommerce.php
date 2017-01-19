@@ -24,7 +24,7 @@ $_['text_payment_hosted']           = 'Hosted Payments';
 $_['text_edit']						= 'Edit Simplify Commerce';
 
 // Entry
-$_['entry_livesecretkey']     		= 'Live Private API Keys:';
+$_['entry_livesecretkey']     		= 'Live Private API Key:';
 $_['entry_livepubkey']     			= 'Live Public API Key:';
 $_['entry_testsecretkey']     		= 'Sandbox Private API Key:';
 $_['entry_testpubkey']     			= 'Sandbox Public API Key:';
