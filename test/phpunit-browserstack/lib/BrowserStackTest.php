@@ -15,7 +15,7 @@ class BrowserStackTest extends PHPUnit_Framework_TestCase
         $CONFIG = $GLOBALS['CONFIG'];
         $task_id = getenv('TASK_ID') ? getenv('TASK_ID') : 0;
 
-        $url = "https://" . "simplifydev1" . ":" . "oJwsFx4PWsmQEQn5qfea" . "@" . "hub-cloud.browserstack.com" ."/wd/hub";
+        $url = "https://" . $GLOBALS['BROWSERSTACK_USERNAME'] . ":" . $GLOBALS['BROWSERSTACK_ACCESS_KEY'] . "@" . $GLOBALS['BROWSERSTACK_SERVER'] ."/wd/hub";
         $caps = $CONFIG['environments'][$task_id];
 
         foreach ($CONFIG["capabilities"] as $key => $value) {

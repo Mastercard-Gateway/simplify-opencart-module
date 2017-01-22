@@ -24,11 +24,11 @@ class ExtensionPaymentAdminTest extends BrowserStackTest {
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_testsecretkey"));
         $inputPaymentFormElement->clear();
-        $inputPaymentFormElement->sendKeys("JCsKX27aUPmBE5UOTJRavvWGPyeGCU5tGb4WWdicOP95YFFQL0ODSXAOkNtXTToq");
+        $inputPaymentFormElement->sendKeys($GLOBALS['SIMPLIFY_PRIVATE_KEY']);
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_testpubkey"));
         $inputPaymentFormElement->clear();
-        $inputPaymentFormElement->sendKeys("sbpb_NmQyMzU3NmYtZDUyMC00M2MyLWI3ODAtMDczZmUxNDNlODYz");
+        $inputPaymentFormElement->sendKeys($GLOBALS['SIMPLIFY_PUBLIC_KEY']);
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_title"));
         $inputPaymentFormElement->clear();
@@ -58,11 +58,11 @@ class ExtensionPaymentAdminTest extends BrowserStackTest {
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_testsecretkey"));
         $inputPaymentFormElement->clear();
-        $inputPaymentFormElement->sendKeys("JCsKX27aUPmBE5UOTJRavvWGPyeGCU5tGb4WWdicOP95YFFQL0ODSXAOkNtXTToq");
+        $inputPaymentFormElement->sendKeys($GLOBALS['SIMPLIFY_PRIVATE_KEY']);
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_testpubkey"));
         $inputPaymentFormElement->clear();
-        $inputPaymentFormElement->sendKeys("sbpb_NmQyMzU3NmYtZDUyMC00M2MyLWI3ODAtMDczZmUxNDNlODYz");
+        $inputPaymentFormElement->sendKeys($GLOBALS['SIMPLIFY_PUBLIC_KEY']);
 
         $inputPaymentFormElement = self::$driverTestUtil->findChildElementBy($editPaymentFormElement, WebDriverBy::name("simplifycommerce_title"));
         $inputPaymentFormElement->clear();
