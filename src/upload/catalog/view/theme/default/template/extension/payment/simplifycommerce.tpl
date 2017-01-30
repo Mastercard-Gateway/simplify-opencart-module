@@ -109,7 +109,7 @@
 				} else {
 
 				    $.ajax({
-						url: 'index.php?route=payment/simplifycommerce/charge',
+						url: 'index.php?route=extension/payment/simplifycommerce/charge',
 						type: 'post',
 						dataType: 'json',
 						data: {cardToken: response['id']},

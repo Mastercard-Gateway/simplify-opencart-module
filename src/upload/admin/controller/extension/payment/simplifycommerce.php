@@ -65,6 +65,8 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
 
+		$this->config->set('simplifycommerce_payment_mode', '1');
+
 		$err_arr = array(
 			'warning',
 			'permission',
