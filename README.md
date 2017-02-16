@@ -12,6 +12,8 @@ Version v1.1.0 Adds Hosted Payments mode.
 
 Version v1.2.0 is compatible with OpenCart 2.3.0.2
 
+Version v1.2.1 Enhancements and compatible with OpenCart 2.3.0.2
+
 ## Installation
 1. Make a backup of your site before applying new mods etc. 
 2. [Download and unzip the latest release](https://github.com/simplifycom/simplify-opencart-module/releases/latest)

@@ -35,7 +35,7 @@ class Simplify_Constants
     /**
      * @var string VERSION SDK version information.
      */
-    const VERSION = '1.1.0';
+    const VERSION = '1.2.1';
 
     /**
      * @var string API_BASE_LIVE_URL URL for the live API endpoint

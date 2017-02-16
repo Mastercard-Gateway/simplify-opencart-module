@@ -54,7 +54,7 @@ class Simplify
     /**
      * @var string $userAgent User-agent string send with requests.
      */
-    public static $userAgent = "OpenCart-Plugin/1.1.0";
+    public static $userAgent = "OpenCart-Plugin/1.2.1";
 
 }
 
