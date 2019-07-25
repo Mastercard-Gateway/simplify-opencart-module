@@ -21,15 +21,13 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$data['entry_cvc'] = $this->language->get('entry_cvc');
 		$data['button_pay'] = $this->language->get('button_pay');
 
-		if ($this->config->get('simplifycommerce_test') == 1) {
-			$data['pub_key'] = trim($this->config->get('simplifycommerce_testpubkey'));
+		if ($this->config->get('payment_simplifycommerce_test') == 1) {
+			$data['pub_key'] = trim($this->config->get('payment_simplifycommerce_testpubkey'));
 		} else {
-			$data['pub_key'] = trim($this->config->get('simplifycommerce_livepubkey'));
+			$data['pub_key'] = trim($this->config->get('payment_simplifycommerce_livepubkey'));
 		}		
-		
-		$data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
-		
-		$data['button_color'] = $this->config->get('simplifycommerce_button_color');
+
+		$data['button_color'] = $this->config->get('payment_simplifycommerce_button_color');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -63,10 +61,10 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 			);
 		}
 
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/simplifycommerce.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/extension/payment/simplifycommerce.tpl', $data);
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/simplifycommerce')) {
+			return $this->load->view($this->config->get('config_template') . '/template/extension/payment/simplifycommerce', $data);
 		} else {
-			return $this->load->view('extension/payment/simplifycommerce.tpl', $data);
+			return $this->load->view('extension/payment/simplifycommerce', $data);
 		}
 	}
 
@@ -79,12 +77,12 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$this->language->load('extension/payment/simplifycommerce');
 		$this->load->model('checkout/order');
 
-		if ($this->config->get('simplifycommerce_test') == 1) {
-			$secret_key = trim($this->config->get('simplifycommerce_testsecretkey'));
-			$public_key = trim($this->config->get('simplifycommerce_testpubkey'));
+		if ($this->config->get('payment_simplifycommerce_test') == 1) {
+			$secret_key = trim($this->config->get('payment_simplifycommerce_testsecretkey'));
+			$public_key = trim($this->config->get('payment_simplifycommerce_testpubkey'));
 		} else {
-			$secret_key = trim($this->config->get('simplifycommerce_livesecretkey'));
-			$public_key = trim($this->config->get('simplifycommerce_livepubkey'));
+			$secret_key = trim($this->config->get('payment_simplifycommerce_livesecretkey'));
+			$public_key = trim($this->config->get('payment_simplifycommerce_livepubkey'));
 		}	
 		try{
 
@@ -105,7 +103,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 				'currency' => strtoupper($order_info['currency_code'])
 			);
 			// check if the order has already been processed by checking the status
-			if ($order_status == $this->config->get('simplifycommerce_order_status_id')){
+			if ($order_status == $this->config->get('payment_simplifycommerce_order_status_id')){
 
 				// clean the session
 				if (isset($this->session->data['order_id'])) {
@@ -132,7 +130,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 					$this->log->write("payment not approved; status: " . $charge->paymentStatus);
 					throw new Exception($this->language->get('payment_declined'));
 				}
-				$this->model_checkout_order->addOrderHistory($order_id, $this->config->get('simplifycommerce_order_status_id'), '', true);
+				$this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_simplifycommerce_order_status_id'), '', true);
 			}
 			else{
 				throw new Exception($this->language->get('message_no_order'));
@@ -147,61 +145,14 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 			} else {
 				$mess = $e->getMessage();
 			}
-			if($this->config->get("simplifycommerce_payment_mode")){
-				$this->session->data['error'] = $mess;
-				return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
-			} else {
-				$json['error'] = $mess;
-				echo json_encode($json);
-				exit();
-			}
+            $this->session->data['error'] = $mess;
+            return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
 		} catch (Exception  $e) {
 			$this->log->write($e->getMessage());
-			if($this->config->get("simplifycommerce_payment_mode")){
-				$this->session->data['error'] = $e->getMessage();
-				return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
-			} else {
-				$json['error'] = $e->getMessage();
-				echo json_encode($json);
-				exit();
-			}
+            $this->session->data['error'] = $e->getMessage();
+            return $this->response->redirect($this->url->link('checkout/checkout','','SSL'));
 		}
 
-		if($this->config->get("simplifycommerce_payment_mode")){
-			//hosted payments
-			return $this->response->redirect($this->url->link('checkout/success'));
-		} else {
-			//standard payments mode
-			$json['success'] = $this->url->link('checkout/success');
-			echo json_encode($json);
-		}
+        return $this->response->redirect($this->url->link('checkout/success'));
  	}
-
-	public function callback() {
-		header("HTTP/1.1 200 OK");	
-
-		try{
-
-			$body = @file_get_contents('php://input');
-			$event = Simplify_Event::createEvent(array('payload' => $body));
-			$this->log->write($event->name);
-
-			switch($event->name) {
-				case 'charge.create':
-					$this->model_checkout_order->update($event->data->description, $this->config->get('simplifycommerce_order_status_id'), '', true);
-					break;
-				case 'charge.failure':
-					$this->model_checkout_order->update($event->data->description, $this->config->get('simplifycommerce_declined_order_status_id'), '', true);
-					break;
-				default:
-					break;
-			}
-
-		} catch(Exception $e) {
-			  $this->log->write($e->getMessage());
-			  exit();
-		}
-	
-	}
 }
-?>

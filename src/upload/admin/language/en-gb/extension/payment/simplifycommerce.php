@@ -54,4 +54,3 @@ $_['error_button_color']            = 'Invalid button color. Should be in hex co
 //Button
 $_['button_save']   				= 'Save';
 $_['button_cancel']   				= 'Cancel';
-?>

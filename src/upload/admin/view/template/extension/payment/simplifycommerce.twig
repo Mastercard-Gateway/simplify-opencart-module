@@ -1,0 +1,169 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+    </ul>
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1><i class="fa fa-credit-card"></i> {{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel-body">
+            {% if error_warning %}
+                <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            {% endif %}
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="test-mode">{{ entry_test }}</label>
+                    <div class="col-sm-10">
+                        {% if payment_simplifycommerce_test %}
+                            <input type="radio" name="payment_simplifycommerce_test" value="1" checked="checked" />
+                            {{ text_test }}
+                            <input type="radio" name="payment_simplifycommerce_test" value="0" />
+                            {{ text_prod }}
+                        {% else %}
+                            <input type="radio" name="payment_simplifycommerce_test" value="1" />
+                            {{ text_test }}
+                            <input type="radio" name="payment_simplifycommerce_test" value="0" checked="checked" />
+                            {{ text_prod }}
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="simplifycommerce_button_color">{{ entry_button_color }}</label>
+                    <div class="col-sm-10">
+                        <input type='text' id="simplifycommerce_button_color" name="payment_simplifycommerce_button_color" value="{{ payment_simplifycommerce_button_color }}"/>
+                        <script>
+                            $("#simplifycommerce_button_color").spectrum({
+                                showInput: true,
+                                preferredFormat: "hex",
+                                clickoutFiresChange: true
+                            });
+                        </script>
+                    </div>
+                    {% if error_button_color %}
+                        <div class="text-danger">{{ error_button_color }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="livesecretkey">{{ entry_livesecretkey }}</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="payment_simplifycommerce_livesecretkey" value="{{ payment_simplifycommerce_livesecretkey }}" class="form-control" id="livesecretkey"/>
+                    </div>
+                    {% if error_livesecretkey %}
+                        <div class="text-danger">{{ error_livesecretkey }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="livepubkey">{{ entry_livepubkey }}</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="payment_simplifycommerce_livepubkey" value="{{ payment_simplifycommerce_livepubkey }}" class="form-control" id="livepubkey"/>
+                    </div>
+                    {% if error_livepubkey %}
+                        <div class="text-danger">{{ error_livepubkey }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="testsecretkey">{{ entry_testsecretkey }}</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="payment_simplifycommerce_testsecretkey" value="{{ payment_simplifycommerce_testsecretkey }}"  class="form-control" id="testsecretkey" />
+                    </div>
+                    {% if error_testsecretkey %}
+                        <div class="text-danger">{{ error_testsecretkey }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="testpubkey">{{ entry_testpubkey }}</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="payment_simplifycommerce_testpubkey" value="{{ payment_simplifycommerce_testpubkey }}"  class="form-control" id="testpubkey" />
+                    </div>
+                    {% if error_testpubkey %}
+                        <div class="text-danger">{{ error_testpubkey }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="sc-title"><span data-toggle="tooltip" title="{{ entry_title_help }}">{{ entry_title }}</span></label>
+                    <div class="col-sm-10">
+                        <input type="text" name="payment_simplifycommerce_title" value="{{ payment_simplifycommerce_title }}"  class="form-control" id="sc-title" />
+                    </div>
+                    {% if error_title %}
+                    <div class="text-danger">{{ error_title }}</div>
+                    {% endif %}</td>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-order-status">{{ entry_order_status }}</label>
+                    <div class="col-sm-10">
+                        <select name="payment_simplifycommerce_order_status_id" id="input-order-status" class="form-control">
+                            {% for order_status in order_statuses %}
+                                {% if order_status.order_status_id  ==  payment_simplifycommerce_order_status_id %}
+                                    <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                                {% else %}
+                                    <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-declined-order-status">{{ entry_declined_order_status }}</label>
+                    <div class="col-sm-10">
+                        <select name="payment_simplifycommerce_declined_order_status_id" id="input-declined-order-status" class="form-control">
+                            {% for declined_order_status in order_statuses %}
+                                {% if declined_order_status.order_status_id  == payment_simplifycommerce_declined_order_status_id %}
+                                    <option value="{{ declined_order_status.order_status_id }}" selected="selected">{{ declined_order_status.name }}</option>
+                                {% else %}
+                                    <option value="{{ declined_order_status.order_status_id }}">{{ declined_order_status.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+                    <div class="col-sm-10">
+                        <select name="payment_simplifycommerce_geo_zone_id" id="input-geo-zone" class="form-control">
+                            <option value="0">{{ text_all_zones }}</option>
+                            {% for geo_zone in geo_zones %}
+                                {% if geo_zone.geo_zone_id  == payment_simplifycommerce_geo_zone_id %}
+                                    <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                                {% else %}
+                                    <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                    <div class="col-sm-10">
+                        <select name="payment_simplifycommerce_status" id="input-status" class="form-control">
+                            {% if payment_simplifycommerce_status %}
+                                <option value="1" selected="selected">{{ text_enabled }}</option>
+                                <option value="0">{{ text_disabled }}</option>
+                            {% else %}
+                                <option value="1">{{ text_enabled }}</option>
+                                <option value="0" selected="selected">{{ text_disabled }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="payment_simplifycommerce_sort_order" value="{{ payment_simplifycommerce_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{ footer }}

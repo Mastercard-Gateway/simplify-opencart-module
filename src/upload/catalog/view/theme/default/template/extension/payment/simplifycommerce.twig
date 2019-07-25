@@ -1,0 +1,17 @@
+<script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
+<div class="form-horizontal" id="payment">
+	<div class="buttons">
+	  <div class="pull-right">
+            <button id="simplify-button"
+                data-color="{{ button_color }}"
+                data-sc-key="{{ pub_key  }}"
+                data-name="{{ store_name }}"
+                data-reference="{{ description }}"
+                data-amount="{{ amount }}"
+                data-operation="create.token"
+                data-receipt="false"
+                data-redirect-url="{{ redirect_url }}"
+            >{{ button_pay }}</button>
+	  </div>
+	</div>
+</div>

@@ -20,4 +20,3 @@ $_['button_pay']        		= 'Confirm Order';
 $_['message_already_processed'] = 'This order has already been processed.';		  
 $_['message_no_order'] = 'No order found to process.';		  
 $_['payment_declined'] = 'Payment has been declined.';		  
-?>
