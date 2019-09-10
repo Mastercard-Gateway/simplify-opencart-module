@@ -19,7 +19,7 @@ Version v1.2.0
 Version v1.2.1
 - Enhancements and compatible with OpenCart 2.3.0.2
 
-Version v1.3.0
+Version v2.0.0
 - Compatiblity with OpenCart 3.0.3.1
 - Removed standard (form) integration
 

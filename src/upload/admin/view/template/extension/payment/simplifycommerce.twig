@@ -22,20 +22,15 @@
             {% endif %}
             <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="test-mode">{{ entry_test }}</label>
+                    <span class="col-sm-2 control-label"><strong>{{ entry_test }}</strong></span>
                     <div class="col-sm-10">
                         {% if payment_simplifycommerce_test %}
-                            <input type="radio" name="payment_simplifycommerce_test" value="1" checked="checked" />
-                            {{ text_test }}
-                            <input type="radio" name="payment_simplifycommerce_test" value="0" />
-                            {{ text_prod }}
+                            <label><input type="radio" name="payment_simplifycommerce_test" value="1" checked="checked" />{{ text_test }}</label>
+                            <label><input type="radio" name="payment_simplifycommerce_test" value="0" />{{ text_prod }}</label>
                         {% else %}
-                            <input type="radio" name="payment_simplifycommerce_test" value="1" />
-                            {{ text_test }}
-                            <input type="radio" name="payment_simplifycommerce_test" value="0" checked="checked" />
-                            {{ text_prod }}
+                            <label><input type="radio" name="payment_simplifycommerce_test" value="1" />{{ text_test }}</label>
+                            <label><input type="radio" name="payment_simplifycommerce_test" value="0" checked="checked" />{{ text_prod }}</label>
                         {% endif %}
-
                     </div>
                 </div>
                 <div class="form-group">
