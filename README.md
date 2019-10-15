@@ -3,6 +3,8 @@
 
 This plugin adds Simplify Commerce as a payment option on your OpenCart checkout page.
 
+Please note: The Standard payment form in some of the previous releases is now deprecated and out of support.
+
 ## Compatibility
 Versions v1.0.0 to v1.0.4
 - Compatible with OpenCart versions up to 1.5.6.4.
