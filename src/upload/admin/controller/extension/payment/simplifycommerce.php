@@ -1,13 +1,25 @@
-<?php 
-
-/*
-@LICENSE@
+<?php
+/**
+ * Copyright (c) 2013-2019 Mastercard
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 	private $error = array(); 
 
 	public function index() {
+
 		$this->load->language('extension/payment/simplifycommerce');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -15,15 +27,13 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$this->document->addStyle('view/javascript/simplifycommerce/spectrum.css');
 		
 		$this->load->model('setting/setting');
-			
+
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->load->model('setting/setting');
-			
-			$this->model_setting_setting->editSetting('simplifycommerce', $this->request->post);
-			
+			$this->model_setting_setting->editSetting('payment_simplifycommerce', $this->request->post);
+
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
 		}
 
 		$data = array();
@@ -65,8 +75,6 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
 
-		$this->config->set('simplifycommerce_payment_mode', '1');
-
 		$err_arr = array(
 			'warning',
 			'permission',
@@ -82,141 +90,133 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 			$data['error_' .$val] = isset($this->error[$val]) ? $this->error[$val] : '';
 		}
 
-  		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = array();
 
-   		$data['breadcrumbs'][]  = array(
-       		'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
-       		'text'      => $this->language->get('text_home')
-   		);
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+		);
 
-   		$data['breadcrumbs'][]  = array(
-       		'href'      => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'),
-       		'text'      => $this->language->get('text_payment')
-   		);
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('text_extension'),
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true)
+		);
 
-   		$data['breadcrumbs'][]  = array(
-       		'href'      => $this->url->link('extension/payment/simplifycommerce', 'token=' . $this->session->data['token'], 'SSL'),
-       		'text'      => $this->language->get('heading_title')
-   		);
-				
-		$data['action'] = $this->url->link('extension/payment/simplifycommerce', 'token=' . $this->session->data['token'], 'SSL');
-		
-		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
-		
-		if (isset($this->request->post['simplifycommerce_test'])) {
-			$data['simplifycommerce_test'] = trim($this->request->post['simplifycommerce_test']);
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('heading_title'),
+			'href' => $this->url->link('extension/payment/simplifycommerce', 'user_token=' . $this->session->data['user_token'], true)
+		);
+
+		$data['action'] = $this->url->link('extension/payment/simplifycommerce', 'user_token=' . $this->session->data['user_token'], true);
+
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
+
+		if (isset($this->request->post['payment_simplifycommerce_test'])) {
+			$data['payment_simplifycommerce_test'] = trim($this->request->post['payment_simplifycommerce_test']);
 		} else {
-			$data['simplifycommerce_test'] = $this->config->get('simplifycommerce_test'); 
+			$data['payment_simplifycommerce_test'] = $this->config->get('payment_simplifycommerce_test');
 		}
 
-		if (isset($this->request->post['simplifycommerce_payment_mode'])) {
-		    $data['simplifycommerce_payment_mode'] = trim($this->request->post['simplifycommerce_payment_mode']);
+		if (isset($this->request->post['payment_simplifycommerce_button_color'])) {
+			$data['payment_simplifycommerce_button_color'] = trim($this->request->post['payment_simplifycommerce_button_color']);
 		} else {
-		    $data['simplifycommerce_payment_mode'] = $this->config->get('simplifycommerce_payment_mode');
-		}
-		
-		if (isset($this->request->post['simplifycommerce_button_color'])) {
-			$data['simplifycommerce_button_color'] = trim($this->request->post['simplifycommerce_button_color']);
-		} else {
-			$data['simplifycommerce_button_color'] = $this->config->get('simplifycommerce_button_color');
+			$data['payment_simplifycommerce_button_color'] = $this->config->get('payment_simplifycommerce_button_color');
 		}
 
 		// set to light blue if not set
-		if(!$data['simplifycommerce_button_color']){
-			$data['simplifycommerce_button_color'] = "#1f90bb";
+		if(!$data['payment_simplifycommerce_button_color']){
+			$data['payment_simplifycommerce_button_color'] = "#1f90bb";
 		}
 
-		if (isset($this->request->post['simplifycommerce_livesecretkey'])) {
-			$data['simplifycommerce_livesecretkey'] = trim($this->request->post['simplifycommerce_livesecretkey']);
+		if (isset($this->request->post['payment_simplifycommerce_livesecretkey'])) {
+			$data['payment_simplifycommerce_livesecretkey'] = trim($this->request->post['payment_simplifycommerce_livesecretkey']);
 		} else {
-			$data['simplifycommerce_livesecretkey'] = $this->config->get('simplifycommerce_livesecretkey');
+			$data['payment_simplifycommerce_livesecretkey'] = $this->config->get('payment_simplifycommerce_livesecretkey');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_livepubkey'])) {
-			$data['simplifycommerce_livepubkey'] = trim($this->request->post['simplifycommerce_livepubkey']);
+		if (isset($this->request->post['payment_simplifycommerce_livepubkey'])) {
+			$data['payment_simplifycommerce_livepubkey'] = trim($this->request->post['payment_simplifycommerce_livepubkey']);
 		} else {
-			$data['simplifycommerce_livepubkey'] = $this->config->get('simplifycommerce_livepubkey');
+			$data['payment_simplifycommerce_livepubkey'] = $this->config->get('payment_simplifycommerce_livepubkey');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_testsecretkey'])) {
-			$data['simplifycommerce_testsecretkey'] = trim($this->request->post['simplifycommerce_testsecretkey']);
+		if (isset($this->request->post['payment_simplifycommerce_testsecretkey'])) {
+			$data['payment_simplifycommerce_testsecretkey'] = trim($this->request->post['payment_simplifycommerce_testsecretkey']);
 		} else {
-			$data['simplifycommerce_testsecretkey'] = $this->config->get('simplifycommerce_testsecretkey');
+			$data['payment_simplifycommerce_testsecretkey'] = $this->config->get('payment_simplifycommerce_testsecretkey');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_testpubkey'])) {
-			$data['simplifycommerce_testpubkey'] = trim($this->request->post['simplifycommerce_testpubkey']);
+		if (isset($this->request->post['payment_simplifycommerce_testpubkey'])) {
+			$data['payment_simplifycommerce_testpubkey'] = trim($this->request->post['payment_simplifycommerce_testpubkey']);
 		} else {
-			$data['simplifycommerce_testpubkey'] = $this->config->get('simplifycommerce_testpubkey');
+			$data['payment_simplifycommerce_testpubkey'] = $this->config->get('payment_simplifycommerce_testpubkey');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_allow_stored'])) {
-			$data['simplifycommerce_allow_stored'] = $this->request->post['simplifycommerce_allow_stored'];
+		if (isset($this->request->post['payment_simplifycommerce_allow_stored'])) {
+			$data['payment_simplifycommerce_allow_stored'] = $this->request->post['payment_simplifycommerce_allow_stored'];
 		} else {
-			$data['simplifycommerce_allow_stored'] = $this->config->get('simplifycommerce_allow_stored');
+			$data['payment_simplifycommerce_allow_stored'] = $this->config->get('payment_simplifycommerce_allow_stored');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_check_cvc'])) {
-			$data['simplifycommerce_check_cvc'] = $this->request->post['simplifycommerce_check_cvc'];
+		if (isset($this->request->post['payment_simplifycommerce_check_cvc'])) {
+			$data['payment_simplifycommerce_check_cvc'] = $this->request->post['payment_simplifycommerce_check_cvc'];
 		} else {
-			$data['simplifycommerce_check_cvc'] = $this->config->get('simplifycommerce_check_cvc');
+			$data['payment_simplifycommerce_check_cvc'] = $this->config->get('payment_simplifycommerce_check_cvc');
 		}
 
-		$data['webhook_url'] = HTTPS_CATALOG . 'index.php?route=extension/payment/simplifycommerce/callback';
-		
-		if (isset($this->request->post['simplifycommerce_title'])) {
-			$data['simplifycommerce_title'] = $this->request->post['simplifycommerce_title'];
+		if (isset($this->request->post['payment_simplifycommerce_title'])) {
+			$data['payment_simplifycommerce_title'] = $this->request->post['payment_simplifycommerce_title'];
 		} else {
-			$data['simplifycommerce_title'] = $this->config->get('simplifycommerce_title');
+			$data['payment_simplifycommerce_title'] = $this->config->get('payment_simplifycommerce_title') ? : 'Pay with Card';
 		}
 
 		$this->load->model('localisation/order_status');
 		
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
-		if (isset($this->request->post['simplifycommerce_order_status_id'])) {
-			$data['simplifycommerce_order_status_id'] = $this->request->post['simplifycommerce_order_status_id'];
+		if (isset($this->request->post['payment_simplifycommerce_order_status_id'])) {
+			$data['payment_simplifycommerce_order_status_id'] = $this->request->post['payment_simplifycommerce_order_status_id'];
 		} else {
-			$data['simplifycommerce_order_status_id'] = $this->config->get('simplifycommerce_order_status_id'); 
+			$data['payment_simplifycommerce_order_status_id'] = $this->config->get('payment_simplifycommerce_order_status_id');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_declined_order_status_id'])) {
-			$data['simplifycommerce_declined_order_status_id'] = $this->request->post['simplifycommerce_declined_order_status_id'];
+		if (isset($this->request->post['payment_simplifycommerce_declined_order_status_id'])) {
+			$data['payment_simplifycommerce_declined_order_status_id'] = $this->request->post['payment_simplifycommerce_declined_order_status_id'];
 		} else {
-			$data['simplifycommerce_declined_order_status_id'] = $this->config->get('simplifycommerce_declined_order_status_id'); 
+			$data['payment_simplifycommerce_declined_order_status_id'] = $this->config->get('payment_simplifycommerce_declined_order_status_id');
 		}
 		
 		$this->load->model('localisation/geo_zone');
 										
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
-		if (isset($this->request->post['simplifycommerce_geo_zone_id'])) {
-			$data['simplifycommerce_geo_zone_id'] = $this->request->post['simplifycommerce_geo_zone_id'];
+		if (isset($this->request->post['payment_simplifycommerce_geo_zone_id'])) {
+			$data['payment_simplifycommerce_geo_zone_id'] = $this->request->post['payment_simplifycommerce_geo_zone_id'];
 		} else {
-			$data['simplifycommerce_geo_zone_id'] = $this->config->get('simplifycommerce_geo_zone_id'); 
+			$data['payment_simplifycommerce_geo_zone_id'] = $this->config->get('payment_simplifycommerce_geo_zone_id');
 		} 
 		
-		if (isset($this->request->post['simplifycommerce_status'])) {
-			$data['simplifycommerce_status'] = $this->request->post['simplifycommerce_status'];
+		if (isset($this->request->post['payment_simplifycommerce_status'])) {
+			$data['payment_simplifycommerce_status'] = $this->request->post['payment_simplifycommerce_status'];
 		} else {
-			$data['simplifycommerce_status'] = $this->config->get('simplifycommerce_status');
+			$data['payment_simplifycommerce_status'] = $this->config->get('payment_simplifycommerce_status');
 		}
 		
-		if (isset($this->request->post['simplifycommerce_sort_order'])) {
-			$data['simplifycommerce_sort_order'] = $this->request->post['simplifycommerce_sort_order'];
+		if (isset($this->request->post['payment_simplifycommerce_sort_order'])) {
+			$data['payment_simplifycommerce_sort_order'] = $this->request->post['payment_simplifycommerce_sort_order'];
 		} else {
-			$data['simplifycommerce_sort_order'] = $this->config->get('simplifycommerce_sort_order');
+			$data['payment_simplifycommerce_sort_order'] = $this->config->get('payment_simplifycommerce_sort_order');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/payment/simplifycommerce.tpl', $data));
+		$this->response->setOutput($this->load->view('extension/payment/simplifycommerce', $data));
 	}
 
 	private function testRegex($param, $regex){
-		$this->request->post['simplifycommerce_' . $param] = $val = trim($this->request->post['simplifycommerce_' . $param]);
+		$this->request->post['payment_simplifycommerce_' . $param] = $val = trim($this->request->post['payment_simplifycommerce_' . $param]);
 		if(!$val || $val && !preg_match($regex, $val)){
 			$this->error[$param] = $this->language->get('error_' . $param);
 		}
@@ -230,7 +230,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		if ($this->error && !isset($this->error['warning'])) {
 			$this->error['warning'] = $this->language->get('error_warning');
 		}
-		if (!$this->request->post['simplifycommerce_title']) {
+		if (!$this->request->post['payment_simplifycommerce_title']) {
 			$this->error['title'] = $this->language->get('error_title');
 		}
 		$this->testRegex('button_color', "/^#[0-9a-fA-F]{6}$/");
@@ -239,11 +239,10 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 		$this->testRegex('testpubkey', "/^sbpb_.*$/");
 
 		// If in live mode, check that we have private and pub live keys
-		if(!$this->request->post['simplifycommerce_test']){
+		if(!$this->request->post['payment_simplifycommerce_test']){
 			$this->testRegex('livesecretkey',"/^[a-zA-Z0-9\/=+]{10,}$/");
 			$this->testRegex('livepubkey',"/^lvpb_.*$/");
 		}
 		return !$this->error;
 	}
 }
-?>
