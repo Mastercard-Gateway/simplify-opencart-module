@@ -26,9 +26,12 @@ Version v2.0.0
 - Removed standard (form) integration
 
 ## Installation
-1. Make a backup of your site before applying new mods etc. 
-2. [Download latest release](https://github.com/simplifycom/simplify-opencart-module/releases/latest)
-3. Install the package by going to Extension > Installer and uploading the .ocmod.zip file
+1. Make a backup of your site before applying new mods etc.
+2. Download .ocmod.zip file of the latest release of the extension from https://github.com/simplifycom/simplify-opencart-module/releases/latest
+3. Go to Admin → Extensions → Installer and upload the downloaded .ocmod.zip file.
+4. Once it will be uploaded successfully, Go to Admin → Extensions → Extensions.
+5. From the extension type filter, choose the Payments type.
+6. Scroll down until you find the Simplify Commerce extension and then click on +(Install) button.
 
 ## Configuration
 Login to your the OpenCart administration application
