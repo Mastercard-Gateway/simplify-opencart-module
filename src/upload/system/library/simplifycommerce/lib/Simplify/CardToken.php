@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2020 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -32,18 +32,23 @@ class Simplify_CardToken extends Simplify_Object {
      * Creates an Simplify_CardToken object
      * @param     array $hash a map of parameters; valid keys are:<dl style="padding-left:10px;">
      *     <dt><tt>callback</tt></dt>    <dd>The URL callback for the cardtoken </dd>
-     *     <dt><tt>card.addressCity</tt></dt>    <dd>City of the cardholder. </dd>
-     *     <dt><tt>card.addressCountry</tt></dt>    <dd>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. </dd>
-     *     <dt><tt>card.addressLine1</tt></dt>    <dd>Address of the cardholder. </dd>
-     *     <dt><tt>card.addressLine2</tt></dt>    <dd>Address of the cardholder if needed. </dd>
-     *     <dt><tt>card.addressState</tt></dt>    <dd>State code (USPS code) of residence of the cardholder. </dd>
-     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers. </dd>
+     *     <dt><tt>card.addressCity</tt></dt>    <dd>City of the cardholder. [max length: 50, min length: 2] </dd>
+     *     <dt><tt>card.addressCountry</tt></dt>    <dd>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. [max length: 2, min length: 2] </dd>
+     *     <dt><tt>card.addressLine1</tt></dt>    <dd>Address of the cardholder. [max length: 255] </dd>
+     *     <dt><tt>card.addressLine2</tt></dt>    <dd>Address of the cardholder if needed. [max length: 255] </dd>
+     *     <dt><tt>card.addressState</tt></dt>    <dd>State of residence of the cardholder. State abbreviations should be used. [max length: 255] </dd>
+     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers or letters. [max length: 32] </dd>
      *     <dt><tt>card.cvc</tt></dt>    <dd>CVC security code of the card. This is the code on the back of the card. Example: 123 </dd>
-     *     <dt><tt>card.expMonth</tt></dt>    <dd>Expiration month of the card. Format is MM. Example: January = 01 <strong>required </strong></dd>
-     *     <dt><tt>card.expYear</tt></dt>    <dd>Expiration year of the card. Format is YY. Example: 2013 = 13 <strong>required </strong></dd>
-     *     <dt><tt>card.name</tt></dt>    <dd>Name as appears on the card. </dd>
-     *     <dt><tt>card.number</tt></dt>    <dd>Card number as it appears on the card. <strong>required </strong></dd>
-     *     <dt><tt>key</tt></dt>    <dd>Key used to create the card token. </dd></dl>
+     *     <dt><tt>card.expMonth</tt></dt>    <dd>Expiration month of the card. Format is MM. Example: January = 01 [min value: 1, max value: 12] <strong>required </strong></dd>
+     *     <dt><tt>card.expYear</tt></dt>    <dd>Expiration year of the card. Format is YY. Example: 2013 = 13 [min value: 0, max value: 99] <strong>required </strong></dd>
+     *     <dt><tt>card.name</tt></dt>    <dd>Name as appears on the card. [max length: 50, min length: 2] </dd>
+     *     <dt><tt>card.number</tt></dt>    <dd>Card number as it appears on the card. [max length: 19, min length: 13] <strong>required </strong></dd>
+     *     <dt><tt>key</tt></dt>    <dd>Key used to create the card token. </dd>
+     *     <dt><tt>secure3DRequestData.amount</tt></dt>    <dd>Amount of the subsequent transaction in the smallest unit of your currency. Example: 100 = $1.00 <strong>required </strong></dd>
+     *     <dt><tt>secure3DRequestData.authOnly</tt></dt>    <dd>Specifies if the subsequent transaction is going to be a Payment or an Authorization (to be Captured later). If false or not specified, it refers to a Payment, otherwise it refers to an Authorization. </dd>
+     *     <dt><tt>secure3DRequestData.currency</tt></dt>    <dd>Currency code (ISO-4217). Must match the currency associated with your account. <strong>required </strong></dd>
+     *     <dt><tt>secure3DRequestData.description</tt></dt>    <dd>A description of the transaction. [max length: 256] <strong>required </strong></dd>
+     *     <dt><tt>secure3DRequestData.id</tt></dt>    <dd>3D Secure data ID. </dd></dl>
      * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.<i/>
      * @return    CardToken a CardToken object.
      */

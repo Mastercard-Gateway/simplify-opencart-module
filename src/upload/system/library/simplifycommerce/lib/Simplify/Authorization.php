@@ -27,18 +27,17 @@
  */
 
 
-class Simplify_Payment extends Simplify_Object {
+class Simplify_Authorization extends Simplify_Object {
     /**
-     * Creates an Simplify_Payment object
+     * Creates an Simplify_Authorization object
      * @param     array $hash a map of parameters; valid keys are:<dl style="padding-left:10px;">
-     *     <dt><tt>amount</tt></dt>    <dd>Amount of the payment (in the smallest unit of your currency). Example: 100 = $1.00 </dd>
-     *     <dt><tt>authorization</tt></dt>    <dd>The ID of the authorization being used to capture the payment. </dd>
+     *     <dt><tt>amount</tt></dt>    <dd>Amount of the payment (in the smallest unit of your currency). Example: 100 = $1.00 <strong>required </strong></dd>
      *     <dt><tt>card.addressCity</tt></dt>    <dd>City of the cardholder. [max length: 50, min length: 2] </dd>
      *     <dt><tt>card.addressCountry</tt></dt>    <dd>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. [max length: 2, min length: 2] </dd>
      *     <dt><tt>card.addressLine1</tt></dt>    <dd>Address of the cardholder. [max length: 255] </dd>
      *     <dt><tt>card.addressLine2</tt></dt>    <dd>Address of the cardholder if needed. [max length: 255] </dd>
      *     <dt><tt>card.addressState</tt></dt>    <dd>State of residence of the cardholder. State abbreviations should be used. [max length: 255] </dd>
-     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers or letters. [max length: 32] </dd>
+     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 characters in length and only contains numbers or letters. [max length: 32] </dd>
      *     <dt><tt>card.cvc</tt></dt>    <dd>CVC security code of the card. This is the code on the back of the card. Example: 123 </dd>
      *     <dt><tt>card.expMonth</tt></dt>    <dd>Expiration month of the card. Format is MM. Example: January = 01 [min value: 1, max value: 12] <strong>required </strong></dd>
      *     <dt><tt>card.expYear</tt></dt>    <dd>Expiration year of the card. Format is YY. Example: 2013 = 13 [min value: 0, max value: 99] <strong>required </strong></dd>
@@ -47,7 +46,6 @@ class Simplify_Payment extends Simplify_Object {
      *     <dt><tt>currency</tt></dt>    <dd>Currency code (ISO-4217) for the transaction. Must match the currency associated with your account. [default: USD] <strong>required </strong></dd>
      *     <dt><tt>customer</tt></dt>    <dd>ID of customer. If specified, card on file of customer will be used. </dd>
      *     <dt><tt>description</tt></dt>    <dd>Free form text field to be used as a description of the payment. This field is echoed back with the payment on any find or list operations. [max length: 1024] </dd>
-     *     <dt><tt>invoice</tt></dt>    <dd>ID of invoice for which this payment is being made. </dd>
      *     <dt><tt>order.commodityCode</tt></dt>    <dd>Standard classification code for products and services. [max length: 5] </dd>
      *     <dt><tt>order.customer</tt></dt>    <dd>ID of the customer associated with the order. </dd>
      *     <dt><tt>order.customerEmail</tt></dt>    <dd>Customer email address. </dd>
@@ -82,20 +80,19 @@ class Simplify_Payment extends Simplify_Object {
      *     <dt><tt>order.source</tt></dt>    <dd>Order source. [default: WEB] <strong>required </strong></dd>
      *     <dt><tt>order.status</tt></dt>    <dd>Status of the order. [default: INCOMPLETE] <strong>required </strong></dd>
      *     <dt><tt>reference</tt></dt>    <dd>Custom reference field to be used with outside systems. </dd>
-     *     <dt><tt>replayId</tt></dt>    <dd>An identifier that can be sent to uniquely identify a payment request to facilitate retries due to I/O related issues. This identifier must be unique for your account (sandbox or live) across all of your payments. If supplied, we will check for a payment on your account that matches this identifier. If found will attempt to return an identical response of the original request. [max length: 50, min length: 1] </dd>
-     *     <dt><tt>statementDescription.name</tt></dt>    <dd>Merchant name. <strong>required </strong></dd>
+     *     <dt><tt>replayId</tt></dt>    <dd>An identifier that can be sent to uniquely identify a payment request to facilitate retries due to I/O related issues. This identifier must be unique for your account (sandbox or live) across all of your payments. If supplied, we will check for a payment on your account that matches this identifier, and if one is found we will attempt to return an identical response of the original request. [max length: 50, min length: 1] </dd>
+     *     <dt><tt>statementDescription.name</tt></dt>    <dd>Merchant name <strong>required </strong></dd>
      *     <dt><tt>statementDescription.phoneNumber</tt></dt>    <dd>Merchant contact phone number. </dd>
-     *     <dt><tt>taxExempt</tt></dt>    <dd>Specify true to indicate that the payment is tax-exempt. </dd>
      *     <dt><tt>token</tt></dt>    <dd>If specified, card associated with card token will be used. [max length: 255] </dd></dl>
      * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.<i/>
-     * @return    Payment a Payment object.
+     * @return    Authorization a Authorization object.
      */
-    static public function createPayment($hash, $authentication = null) {
+    static public function createAuthorization($hash, $authentication = null) {
 
         $args = func_get_args();
         $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
-        $instance = new Simplify_Payment();
+        $instance = new Simplify_Authorization();
         $instance->setAll($hash);
 
         $object = Simplify_PaymentsApi::createObject($instance, $authentication);
@@ -104,24 +101,41 @@ class Simplify_Payment extends Simplify_Object {
 
 
 
+
        /**
-        * Retrieve Simplify_Payment objects.
-        * @param     array criteria a map of parameters; valid keys are:<dl style="padding-left:10px;">
-        *     <dt><tt>filter</tt></dt>    <dd><table class="filter_list"><tr><td>filter.id</td><td>Filter by the payment Id</td></tr><tr><td>filter.replayId</td><td>Filter by the compoundReplayId</td></tr><tr><td>filter.last4</td><td>Filter by the card number (last 4 digits)</td></tr><tr><td>filter.amount</td><td>Filter by the payment amount (in the smallest unit of your currency)</td></tr><tr><td>filter.text</td><td>Filter by the description of the payment</td></tr><tr><td>filter.amountMin & filter.amountMax</td><td>The filter amountMin must be used with amountMax to find payments with payments amounts between the min and max figures</td></tr><tr><td>filter.dateCreatedMin<sup>*</sup></td><td>Filter by the minimum created date you are searching for - Date in UTC millis</td></tr><tr><td>filter.dateCreatedMax<sup>*</sup></td><td>Filter by the maximum created date you are searching for - Date in UTC millis</td></tr><tr><td>filter.deposit</td><td>Filter by the deposit id connected to the payment</td></tr><tr><td>filter.customer</td><td>Filter using the Id of the customer to find the payments for that customer</td></tr><tr><td>filter.status</td><td>Filter by the payment status text</td></tr><tr><td>filter.reference</td><td>Filter by the payment reference text</td></tr><tr><td>filter.authCode</td><td>Filter by the payment authorization code (Not the authorization ID)</td></tr><tr><td>filter.q</td><td>You can use this to filter by the Id, the authCode or the amount of the payment</td></tr></table><br><sup>*</sup>Use dateCreatedMin with dateCreatedMax in the same filter if you want to search between two created dates  </dd>
-        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return. [min value: 0, max value: 50, default: 20]  </dd>
-        *     <dt><tt>offset</tt></dt>    <dd>Used in paging of the list.  This is the start offset of the page. [min value: 0, default: 0]  </dd>
-        *     <dt><tt>sorting</tt></dt>    <dd>Allows for ascending or descending sorting of the list.  The value maps properties to the sort direction (either <tt>asc</tt> for ascending or <tt>desc</tt> for descending).  Sortable properties are: <tt> dateCreated</tt><tt> createdBy</tt><tt> amount</tt><tt> id</tt><tt> description</tt><tt> paymentDate</tt>.</dd></dl>
+        * Deletes an Simplify_Authorization object.
+        *
         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
-        * @return    ResourceList a ResourceList object that holds the list of Payment objects and the total
-        *            number of Payment objects available for the given criteria.
+        */
+        public function deleteAuthorization($authentication = null) {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 1);
+
+            $obj = Simplify_PaymentsApi::deleteObject($this, $authentication);
+            $this->properties = null;
+            return true;
+        }
+
+
+       /**
+        * Retrieve Simplify_Authorization objects.
+        * @param     array criteria a map of parameters; valid keys are:<dl style="padding-left:10px;">
+        *     <dt><tt>filter</tt></dt>    <dd><table class="filter_list"><tr><td>filter.id</td><td>Filter by the Authorization Id</td></tr><tr><td>filter.replayId</td><td>Filter by the compoundReplayId</td></tr><tr><td>filter.last4</td><td>Filter by the card number (last 4 digits)</td></tr><tr><td>filter.amount</td><td>Filter by the transaction amount (in the smallest unit of your currency)</td></tr><tr><td>filter.text</td><td>Filter by the description of the authorization</td></tr><tr><td>filter.amountMin & filter.amountMax</td><td>The filter amountMin must be used with amountMax to find authorizations with authorization values between the min and max</td></tr><tr><td>filter.dateCreatedMin<sup>*</sup></td><td>Filter by the minimum created date you are searching for - Date in UTC millis</td></tr><tr><td>filter.dateCreatedMax<sup>*</sup></td><td>Filter by the maximum created date you are searching for - Date in UTC millis</td></tr><tr><td>filter.deposit</td><td>Filter by the deposit id</td></tr><tr><td>filter.customer</td><td>Filter using the Id of the customer to find the authorizations for that customer</td></tr><tr><td>filter.status</td><td>Filter by the authorization status text</td></tr><tr><td>filter.authCode</td><td>Filter by the authorization code (Not the authorization ID)</td></tr><tr><td>filter.q</td><td>You can use this to filter by the ID, the authCode or the amount of the authorization</td></tr></table><br><sup>*</sup>Use dateCreatedMin with dateCreatedMax in the same filter if you want to search between two created dates  </dd>
+        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return. [min value: 0, max value: 50, default: 20]  </dd>
+        *     <dt><tt>offset</tt></dt>    <dd>Used in pagination of the list. This is the start offset of the page. [min value: 0, default: 0]  </dd>
+        *     <dt><tt>sorting</tt></dt>    <dd>Allows for ascending or descending sorting of the list.  The value maps properties to the sort direction (either <tt>asc</tt> for ascending or <tt>desc</tt> for descending).  Sortable properties are: <tt> dateCreated</tt><tt> amount</tt><tt> id</tt><tt> description</tt><tt> paymentDate</tt>.</dd></dl>
+        * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
+        * @return    ResourceList a ResourceList object that holds the list of Authorization objects and the total
+        *            number of Authorization objects available for the given criteria.
         * @see       ResourceList
         */
-        static public function listPayment($criteria = null, $authentication = null) {
+        static public function listAuthorization($criteria = null, $authentication = null) {
 
             $args = func_get_args();
             $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
-            $val = new Simplify_Payment();
+            $val = new Simplify_Authorization();
             $list = Simplify_PaymentsApi::listObject($val, $criteria, $authentication);
 
             return $list;
@@ -129,18 +143,18 @@ class Simplify_Payment extends Simplify_Object {
 
 
         /**
-         * Retrieve a Simplify_Payment object from the API
+         * Retrieve a Simplify_Authorization object from the API
          *
-         * @param     string id  the id of the Payment object to retrieve
+         * @param     string id  the id of the Authorization object to retrieve
          * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
-         * @return    Payment a Payment object
+         * @return    Authorization a Authorization object
          */
-        static public function findPayment($id, $authentication = null) {
+        static public function findAuthorization($id, $authentication = null) {
 
             $args = func_get_args();
             $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
-            $val = new Simplify_Payment();
+            $val = new Simplify_Authorization();
             $val->id = $id;
 
             $obj = Simplify_PaymentsApi::findObject($val, $authentication);
@@ -148,28 +162,10 @@ class Simplify_Payment extends Simplify_Object {
             return $obj;
         }
 
-
-        /**
-         * Updates an Simplify_Payment object.
-         *
-         * The properties that can be updated:
-         * <dl style="padding-left:10px;"></dl>
-         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
-         * @return    Payment a Payment object.
-         */
-        public function updatePayment($authentication = null)  {
-
-            $args = func_get_args();
-            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 1);
-
-            $object = Simplify_PaymentsApi::updateObject($this, $authentication);
-            return $object;
-        }
-
     /**
      * @ignore
      */
     public function getClazz() {
-        return "Payment";
+        return "Authorization";
     }
 }

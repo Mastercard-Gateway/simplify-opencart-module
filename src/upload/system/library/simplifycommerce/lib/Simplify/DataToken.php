@@ -27,38 +27,51 @@
  */
 
 
-class Simplify_Event extends Simplify_Object {
-
+class Simplify_DataToken extends Simplify_Object {
     /**
-     * Creates an Event object
-     * @param     array $hash A map of parameters; valid keys are:
-     *     <dt><code>paylod</code></dt>    <dd>The raw JWS payload. </dd> <strong>required</strong>
-     *     <dt><code>url</code></dt>    <dd>The URL for the webhook.  If present it must match the URL registered for the webhook.</dd>
-     * @param  $authentication Object that contains the API public and private keys.  If null the values of the static
-     *         Simplify::$publicKey and Simplify::$privateKey will be used.
-     * @return Payments_Event an Event object.
-     * @throws InvalidArgumentException
+     * Creates an Simplify_DataToken object
+     * @param     array $hash a map of parameters; valid keys are:<dl style="padding-left:10px;"></dl>
+     * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.<i/>
+     * @return    DataToken a DataToken object.
      */
-    static public function createEvent($hash, $authentication = null) {
+    static public function createDataToken($hash, $authentication = null) {
 
         $args = func_get_args();
         $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
-        $paymentsApi = new Simplify_PaymentsApi();
+        $instance = new Simplify_DataToken();
+        $instance->setAll($hash);
 
-        $jsonObject = $paymentsApi->jwsDecode($hash, $authentication);
-
-        if ($jsonObject['event'] == null) {
-            throw new InvalidArgumentException("Incorect data in webhook event");
-        }   
-
-        return  $paymentsApi->convertFromHashToObject($jsonObject['event'], self::getClazz());
+        $object = Simplify_PaymentsApi::createObject($instance, $authentication);
+        return $object;
     }
+
+
+
+        /**
+         * Retrieve a Simplify_DataToken object from the API
+         *
+         * @param     string id  the id of the DataToken object to retrieve
+         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
+         * @return    DataToken a DataToken object
+         */
+        static public function findDataToken($id, $authentication = null) {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
+
+            $val = new Simplify_DataToken();
+            $val->id = $id;
+
+            $obj = Simplify_PaymentsApi::findObject($val, $authentication);
+
+            return $obj;
+        }
 
     /**
      * @ignore
      */
-    static public function getClazz() {
-        return "Event";
+    public function getClazz() {
+        return "DataToken";
     }
 }
