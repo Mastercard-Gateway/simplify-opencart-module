@@ -21,6 +21,8 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
 
     public function index()
     {
+        // Install must not fail even if executed multiple times
+        $this->install();
 
         $this->load->language('extension/payment/simplifycommerce');
 
@@ -55,6 +57,8 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
         $data['text_prod'] = $this->language->get('text_prod');
         $data['text_payment_hosted'] = $this->language->get('text_payment_hosted');
         $data['text_payment_standard'] = $this->language->get('text_payment_standard');
+        $data['text_txn_mode_authorize'] = $this->language->get('text_txn_mode_authorize');
+        $data['text_txn_mode_pay'] = $this->language->get('text_txn_mode_pay');
 
         $data['entry_livesecretkey'] = $this->language->get('entry_livesecretkey');
         $data['entry_livepubkey'] = $this->language->get('entry_livepubkey');
@@ -74,6 +78,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
         $data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
         $data['entry_status'] = $this->language->get('entry_status');
         $data['entry_sort_order'] = $this->language->get('entry_sort_order');
+        $data['entry_txn_mode'] = $this->language->get('entry_txn_mode');
 
         $data['button_save'] = $this->language->get('button_save');
         $data['button_cancel'] = $this->language->get('button_cancel');
@@ -193,6 +198,12 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
             $data['payment_simplifycommerce_declined_order_status_id'] = $this->config->get('payment_simplifycommerce_declined_order_status_id');
         }
 
+        if (isset($this->request->post['payment_simplifycommerce_txn_mode'])) {
+            $data['payment_simplifycommerce_txn_mode'] = $this->request->post['payment_simplifycommerce_txn_mode'];
+        } else {
+            $data['payment_simplifycommerce_txn_mode'] = $this->config->get('payment_simplifycommerce_txn_mode') ?: ModelExtensionPaymentSimplifyCommerce::PAYMENT;
+        }
+
         $this->load->model('localisation/geo_zone');
 
         $data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
@@ -269,5 +280,27 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
         $this->load->model('setting/event');
         $this->model_extension_payment_simplifycommerce->uninstall();
         $this->model_extension_payment_simplifycommerce->deleteEvents();
+    }
+
+    public function order() {
+        $this->load->model('extension/payment/simplifycommerce');
+        $order = $this->model_extension_payment_simplifycommerce->getOrder(
+            $this->request->get['order_id']
+        );
+
+        if ($order) {
+            $this->load->language('extension/payment/simplifycommerce');
+
+            $data['simplifycommerce_order'] = array(
+                'transactions' => $this->model_extension_payment_simplifycommerce->getTransactions(
+                    $this->request->get['order_id']
+                )
+            );
+
+            $data['order_id'] = $this->request->get['order_id'];
+            $data['user_token'] = $this->request->get['user_token'];
+
+            return $this->load->view('extension/payment/simplifycommerce_order', $data);
+        }
     }
 }

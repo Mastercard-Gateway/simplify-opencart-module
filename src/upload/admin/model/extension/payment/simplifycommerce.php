@@ -17,25 +17,34 @@
 
 class ModelExtensionPaymentSimplifyCommerce extends Model
 {
-    const AUTHORIZE = 'authorize';
+    const AUTHORIZE = 'authorization';
     const PAYMENT = 'payment';
 
-    /**
-     * @return array
-     */
-    public function getModes()
-    {
-        $this->load->language('extension/payment/simplifycommerce');
-        return [
-            [
-                'label' => $this->language->get('choice_payment'),
-                'value' => self::PAYMENT
-            ],
-            [
-                'label' => $this->language->get('choice_authorize'),
-                'value' => self::AUTHORIZE
-            ],
-        ];
+    public function getOrder($order_id) {
+
+        $this->load->model('sale/order');
+        $order_info = $this->model_sale_order->getOrder($order_id);
+
+        if ($order_info['payment_code'] === 'simplifycommerce') {
+            return $order_info;
+        }
+
+        return null;
+    }
+
+    public function getTransactions($order_id) {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "simplifycommerce_order_transaction` WHERE `order_id` = '" . $this->db->escape($order_id) . "'");
+
+        $transactions = array();
+        if ($query->num_rows) {
+            foreach ($query->rows as $row) {
+                $row['amount'] = number_format(($row['amount'] / 100), 2);
+                $transactions[] = $row;
+            }
+            return $transactions;
+        } else {
+            return false;
+        }
     }
 
     public function install()

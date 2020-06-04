@@ -145,13 +145,27 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
                 throw new Exception($this->language->get('message_already_processed'));
             } else {
                 if ($order_info) {
-                    $charge = Simplify_Payment::createPayment($c, $public_key, $secret_key);
+                    $txnMode = $this->config->get('payment_simplifycommerce_txn_mode') ?: 'payment';
+                    if ($txnMode == 'authorize') {
+                        $charge = Simplify_Authorization::createAuthorization($c, $public_key, $secret_key);
+                        $status = 'Open';
+                    } else {
+                        $charge = Simplify_Payment::createPayment($c, $public_key, $secret_key);
+                        $status = 'Completed';
+                    }
                     if ($charge->paymentStatus != "APPROVED") {
                         $this->log->write("payment not approved; status: " . $charge->paymentStatus);
                         throw new Exception($this->language->get('payment_declined'));
                     }
-                    $this->model_checkout_order->addOrderHistory($order_id,
-                        $this->config->get('payment_simplifycommerce_order_status_id'), '', true);
+
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($order_id) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount). "', date_added = NOW()");
+
+                    $this->model_checkout_order->addOrderHistory(
+                        $order_id,
+                        $this->config->get('payment_simplifycommerce_order_status_id'),
+                        '',
+                        true
+                    );
                 } else {
                     throw new Exception($this->language->get('message_no_order'));
                 }

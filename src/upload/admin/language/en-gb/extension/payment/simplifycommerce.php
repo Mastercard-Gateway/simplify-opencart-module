@@ -35,6 +35,14 @@ $_['text_declined']					= 'Declined';
 $_['text_payment_standard']         = 'Standard';
 $_['text_payment_hosted']           = 'Hosted Payments';
 $_['text_edit']						= 'Edit Simplify Commerce';
+$_['text_txn_mode_authorize']		= 'Authorization';
+$_['text_txn_mode_pay']				= 'Payment';
+$_['text_order_ref']                = 'Order ID';
+$_['text_txn_ref']                  = 'Transaction ID';
+$_['text_txn_type']                 = 'Transaction Type';
+$_['text_txn_status']               = 'Transaction Status';
+$_['text_txn_amount']               = 'Transaction Amount';
+$_['text_txn_actions']              = 'Actions';
 
 // Entry
 $_['entry_livesecretkey']     		= 'Live Private API Key:';
@@ -54,6 +62,7 @@ $_['entry_declined_order_status'] 	= 'Declined Order Status:';
 $_['entry_geo_zone']     			= 'Geo Zone:';
 $_['entry_status']       			= 'Status:';
 $_['entry_sort_order']   			= 'Sort Order:';
+$_['entry_txn_mode']   			    = 'Transaction Mode:';
 
 // Error
 $_['error_permission']   			= 'Warning: You do not have permission to modify payment Simplify Commerce!';
@@ -67,3 +76,5 @@ $_['error_button_color']            = 'Invalid button color. Should be in hex co
 //Button
 $_['button_save']   				= 'Save';
 $_['button_cancel']   				= 'Cancel';
+$_['button_capture']   				= 'Capure';
+$_['button_void']   				= 'Reverse';
