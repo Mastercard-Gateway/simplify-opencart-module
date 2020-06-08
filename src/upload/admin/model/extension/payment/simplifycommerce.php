@@ -32,20 +32,53 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
         return null;
     }
 
+    /**
+     * @param string $order_id
+     * @return array
+     */
     public function getTransactions($order_id) {
         $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "simplifycommerce_order_transaction` WHERE `order_id` = '" . $this->db->escape($order_id) . "'");
 
         $transactions = array();
         if ($query->num_rows) {
             foreach ($query->rows as $row) {
-                $row['amount'] = number_format(($row['amount'] / 100), 2);
-                $transactions[] = $row;
+                $transactions[] = $this->rowTxn($row);
             }
-            return $transactions;
-        } else {
-            return false;
         }
+        return $transactions;
     }
+
+    /**
+     * @param string $order_id
+     * @param string $txn_id
+     * @return array|bool
+     */
+    public function getTransaction($order_id, $txn_id) {
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "simplifycommerce_order_transaction` WHERE `order_id` = '" . $this->db->escape($order_id) . "' AND `transaction_id` = '" . $this->db->escape($txn_id) . "' LIMIT 1");
+
+        $transactions = array();
+        if ($query->num_rows) {
+            foreach ($query->rows as $row) {
+                $transactions[] = $this->rowTxn($row);
+            }
+        }
+        if (!empty($transactions)) {
+            return $transactions[0];
+        }
+        return false;
+    }
+
+    /**
+     * @param array $row
+     * @return array
+     */
+    protected function rowTxn($row) {
+        $amount = ($row['amount'] / 100);
+        $amount = round($amount, 2);
+        $row['amount'] = number_format($amount, 2);
+        return $row;
+    }
+
 
     public function install()
     {

@@ -43,6 +43,11 @@ $_['text_txn_type']                 = 'Transaction Type';
 $_['text_txn_status']               = 'Transaction Status';
 $_['text_txn_amount']               = 'Transaction Amount';
 $_['text_txn_actions']              = 'Actions';
+$_['text_confirm_capture']          = 'Are you sure you want to capture this authorization?';
+$_['text_confirm_void']             = 'Are you sure you want to void this authorization?';
+$_['text_date_created']             = 'Date';
+$_['text_txn_successful']           = 'Transaction created successfully';
+$_['text_payment_txn_info']         = 'Transactions';
 
 // Entry
 $_['entry_livesecretkey']     		= 'Live Private API Key:';
@@ -76,5 +81,5 @@ $_['error_button_color']            = 'Invalid button color. Should be in hex co
 //Button
 $_['button_save']   				= 'Save';
 $_['button_cancel']   				= 'Cancel';
-$_['button_capture']   				= 'Capure';
+$_['button_capture']   				= 'Capture';
 $_['button_void']   				= 'Reverse';

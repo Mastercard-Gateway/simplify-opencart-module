@@ -146,7 +146,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
             } else {
                 if ($order_info) {
                     $txnMode = $this->config->get('payment_simplifycommerce_txn_mode') ?: 'payment';
-                    if ($txnMode == 'authorize') {
+                    if ($txnMode == 'authorization') {
                         $charge = Simplify_Authorization::createAuthorization($c, $public_key, $secret_key);
                         $status = 'Open';
                     } else {

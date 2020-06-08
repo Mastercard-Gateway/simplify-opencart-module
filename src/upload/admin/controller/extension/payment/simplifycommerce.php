@@ -303,4 +303,70 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
             return $this->load->view('extension/payment/simplifycommerce_order', $data);
         }
     }
+
+    public function capture()
+    {
+        $this->load->language('extension/payment/worldpay');
+        $json = array();
+
+        if (!isset($this->request->post['order_id']) || empty($this->request->post['order_id'])) {
+            $json['error'] = true;
+            $json['msg'] = 'Missing data';
+            $this->response->setOutput(json_encode($json));
+            return;
+        }
+
+        $this->load->model('extension/payment/simplifycommerce');
+        require_once(DIR_SYSTEM . 'library/simplifycommerce/lib/Simplify.php');
+
+        $authTxn = $this->model_extension_payment_simplifycommerce->getTransaction(
+            $this->request->post['order_id'],
+            $this->request->post['txn_id']
+        );
+
+        $this->load->model('sale/order');
+        $order_info = $this->model_sale_order->getOrder($this->request->post['order_id']);
+
+        if ($this->config->get('payment_simplifycommerce_test') == 1) {
+            $secret_key = trim($this->config->get('payment_simplifycommerce_testsecretkey'));
+            $public_key = trim($this->config->get('payment_simplifycommerce_testpubkey'));
+        } else {
+            $secret_key = trim($this->config->get('payment_simplifycommerce_livesecretkey'));
+            $public_key = trim($this->config->get('payment_simplifycommerce_livepubkey'));
+        }
+
+        try {
+            $charge = Simplify_Payment::createPayment(array(
+                'authorization' => $authTxn['transaction_id'],
+                'reference' => $authTxn['order_id'],
+                'currency' => strtoupper($order_info['currency_code']),
+                'amount' => ((float) $authTxn['amount']) * 100
+            ), $public_key, $secret_key);
+
+            if ($charge->paymentStatus != "APPROVED") {
+                throw new Exception('Not approved');
+            }
+        } catch (Exception $e) {
+            $json['error'] = true;
+            $json['msg'] = 'Simplify Exception: ' . $e->getMessage();
+            $this->response->setOutput(json_encode($json));
+            return;
+        }
+
+        $txnMode = 'capture';
+        $status = 'Completed';
+
+        // Create capture txn
+        $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($authTxn['order_id']) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount). "', date_added = NOW()");
+
+        // Close auth txn
+        $this->db->query("UPDATE " . DB_PREFIX . "simplifycommerce_order_transaction SET status = 'Closed' WHERE transaction_id = '".$authTxn['transaction_id']."' AND order_id = '".$authTxn['order_id']."' LIMIT 1");
+
+        $json = array(
+            'error' => false,
+            'msg' => 'Transaction created successfully'
+        );
+
+        $this->response->setOutput(json_encode($json));
+    }
 }
