@@ -25,7 +25,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 	    $copy = $field;
         $encoding = mb_detect_encoding($field);
         if ($encoding !== 'ASCII') {
-            if (!function_exists('transliterator_transliterate')) {
+            if (function_exists('transliterator_transliterate')) {
                 $field = transliterator_transliterate('Any-Latin; Latin-ASCII', $field);
 		    } else if (function_exists('iconv')) {
                 // fall back to iconv if intl module not available
