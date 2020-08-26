@@ -306,7 +306,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
 
     public function capture()
     {
-        $this->load->language('extension/payment/worldpay');
+        $this->load->language('extension/payment/simplifycommerce');
         $json = array();
 
         if (!isset($this->request->post['order_id']) || empty($this->request->post['order_id'])) {
