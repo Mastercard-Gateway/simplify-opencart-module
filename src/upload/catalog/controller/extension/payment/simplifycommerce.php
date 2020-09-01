@@ -22,23 +22,15 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller {
 	}
 
     protected function attempt_transliteration($field) {
-	    $copy = $field;
         $encoding = mb_detect_encoding($field);
         if ($encoding !== 'ASCII') {
             if (function_exists('transliterator_transliterate')) {
                 $field = transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0080-\u7fff] remove', $field);
-		    } else if (function_exists('iconv')) {
+		    } else {
                 // fall back to iconv if intl module not available
                 $field = iconv($encoding, 'ASCII//TRANSLIT//IGNORE', $field);
                 $field = str_ireplace('?', '', $field);
                 $field = trim($field);
-            } else {
-                // no transliteration possible, revert to original field
-                return $field;
-            }
-            if (!$field) {
-                // if translit turned the string into any false-like value, return original instead
-                return $copy;
             }
         }
         return $field;

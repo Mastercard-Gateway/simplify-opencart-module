@@ -20,7 +20,7 @@
             <button id="simplify-button"
                 data-color="{{ button_color }}"
                 data-sc-key="{{ pub_key  }}"
-                data-name="{{ store_name }}"
+                {% if store_name %}data-name="{{ store_name }}"{% endif %}
                 data-reference="{{ description }}"
                 data-amount="{{ amount }}"
                 data-operation="create.token"
