@@ -17,11 +17,26 @@
 
 class ControllerExtensionPaymentSimplifyCommerce extends Controller
 {
-
     private function calcAmount($order_info)
     {
         return 100 * $this->currency->format($order_info['total'], $order_info['currency_code'],
                 $order_info['currency_value'], false);
+    }
+
+    protected function attempt_transliteration($field)
+    {
+        $encoding = mb_detect_encoding($field);
+        if ($encoding !== 'ASCII') {
+            if (function_exists('transliterator_transliterate')) {
+                $field = transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0080-\u7fff] remove', $field);
+            } else {
+                // fall back to iconv if intl module not available
+                $field = iconv($encoding, 'ASCII//TRANSLIT//IGNORE', $field);
+                $field = str_ireplace('?', '', $field);
+                $field = trim($field);
+            }
+        }
+        return $field;
     }
 
     public function index()
@@ -48,7 +63,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
 
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
-        $data['store_name'] = $order_info["store_name"];
+        $data['store_name'] = $this->attempt_transliteration($order_info["store_name"]);
 
         $data['amount'] = $this->calcAmount($order_info);
 
@@ -158,7 +173,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
                         throw new Exception($this->language->get('payment_declined'));
                     }
 
-                    $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($order_id) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount). "', date_added = NOW()");
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($order_id) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount) . "', date_added = NOW()");
 
                     $this->model_checkout_order->addOrderHistory(
                         $order_id,
@@ -180,6 +195,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
             } else {
                 $mess = $e->getMessage();
             }
+
             $this->session->data['error'] = $mess;
             return $this->response->redirect($this->url->link('checkout/checkout', '', 'SSL'));
         } catch (Exception  $e) {
