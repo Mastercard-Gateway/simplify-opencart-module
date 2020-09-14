@@ -29,6 +29,9 @@ Version v2.0.0
 - Compatiblity with OpenCart 3.0.3.1
 - Removed standard (form) integration
 
+Version v2.1.0
+- Adds Authorize + Capture transaction modes
+
 ## Installation
 1. Make a backup of your site before applying new mods etc.
 2. Download .ocmod.zip file of the latest release of the extension from https://github.com/simplifycom/simplify-opencart-module/releases/latest

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2020 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -35,25 +35,29 @@ class Simplify_Customer extends Simplify_Object {
      *     <dt><tt>card.addressCountry</tt></dt>    <dd>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. <strong>required </strong></dd>
      *     <dt><tt>card.addressLine1</tt></dt>    <dd>Address of the cardholder <strong>required </strong></dd>
      *     <dt><tt>card.addressLine2</tt></dt>    <dd>Address of the cardholder if needed. <strong>required </strong></dd>
-     *     <dt><tt>card.addressState</tt></dt>    <dd>State code (USPS code) of residence of the cardholder. <strong>required </strong></dd>
-     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers. <strong>required </strong></dd>
+     *     <dt><tt>card.addressState</tt></dt>    <dd>State of residence of the cardholder. State abbreviations should be used. <strong>required </strong></dd>
+     *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers or letters. <strong>required </strong></dd>
      *     <dt><tt>card.cvc</tt></dt>    <dd>CVC security code of the card. This is the code on the back of the card. Example: 123 <strong>required </strong></dd>
      *     <dt><tt>card.expMonth</tt></dt>    <dd>Expiration month of the card. Format is MM. Example: January = 01 <strong>required </strong></dd>
      *     <dt><tt>card.expYear</tt></dt>    <dd>Expiration year of the card. Format is YY. Example: 2013 = 13 <strong>required </strong></dd>
      *     <dt><tt>card.id</tt></dt>    <dd>ID of card. Unused during customer create. </dd>
      *     <dt><tt>card.name</tt></dt>    <dd>Name as appears on the card. <strong>required </strong></dd>
-     *     <dt><tt>card.number</tt></dt>    <dd>Card number as it appears on the card. </dd>
+     *     <dt><tt>card.number</tt></dt>    <dd>Card number as it appears on the card. [max length: 19, min length: 13] </dd>
      *     <dt><tt>email</tt></dt>    <dd>Email address of the customer <strong>required </strong></dd>
-     *     <dt><tt>name</tt></dt>    <dd>Customer name <strong>required </strong></dd>
+     *     <dt><tt>name</tt></dt>    <dd>Customer name [max length: 50, min length: 2] <strong>required </strong></dd>
      *     <dt><tt>reference</tt></dt>    <dd>Reference field for external applications use. </dd>
-     *     <dt><tt>subscriptions.amount</tt></dt>    <dd>Amount of payment in minor units. Example: 1000 = 10.00 </dd>
+     *     <dt><tt>subscriptions.amount</tt></dt>    <dd>Amount of payment in the smallest unit of your currency. Example: 100 = $1.00 </dd>
+     *     <dt><tt>subscriptions.billingCycle</tt></dt>    <dd>How the plan is billed to the customer. Values must be AUTO (indefinitely until the customer cancels) or FIXED (a fixed number of billing cycles). [default: AUTO] </dd>
+     *     <dt><tt>subscriptions.billingCycleLimit</tt></dt>    <dd>The number of fixed billing cycles for a plan. Only used if the billingCycle parameter is set to FIXED. Example: 4 </dd>
      *     <dt><tt>subscriptions.coupon</tt></dt>    <dd>Coupon associated with the subscription for the customer. </dd>
-     *     <dt><tt>subscriptions.currency</tt></dt>    <dd>Currency code (ISO-4217). Must match the currency associated with your account. <strong>default:USD</strong></dd>
+     *     <dt><tt>subscriptions.currency</tt></dt>    <dd>Currency code (ISO-4217). Must match the currency associated with your account. </dd>
      *     <dt><tt>subscriptions.customer</tt></dt>    <dd>The customer ID to create the subscription for. Do not supply this when creating a customer. </dd>
-     *     <dt><tt>subscriptions.frequency</tt></dt>    <dd>Frequency of payment for the plan. Example: Monthly </dd>
+     *     <dt><tt>subscriptions.frequency</tt></dt>    <dd>Frequency of payment for the plan. Used in conjunction with frequencyPeriod. Valid values are "DAILY", "WEEKLY", "MONTHLY" and "YEARLY". </dd>
+     *     <dt><tt>subscriptions.frequencyPeriod</tt></dt>    <dd>Period of frequency of payment for the plan. Example: if the frequency is weekly, and periodFrequency is 2, then the subscription is billed bi-weekly. </dd>
      *     <dt><tt>subscriptions.name</tt></dt>    <dd>Name describing subscription </dd>
      *     <dt><tt>subscriptions.plan</tt></dt>    <dd>The plan ID that the subscription should be created from. </dd>
-     *     <dt><tt>subscriptions.quantity</tt></dt>    <dd>Quantity of the plan for the subscription. </dd>
+     *     <dt><tt>subscriptions.quantity</tt></dt>    <dd>Quantity of the plan for the subscription. [min value: 1] </dd>
+     *     <dt><tt>subscriptions.renewalReminderLeadDays</tt></dt>    <dd>If set, how many days before the next billing cycle that a renewal reminder is sent to the customer. If null, then no emails are sent. Minimum value is 7 if set. </dd>
      *     <dt><tt>token</tt></dt>    <dd>If specified, card associated with card token will be used </dd></dl>
      * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.<i/>
      * @return    Customer a Customer object.
@@ -92,9 +96,9 @@ class Simplify_Customer extends Simplify_Object {
        /**
         * Retrieve Simplify_Customer objects.
         * @param     array criteria a map of parameters; valid keys are:<dl style="padding-left:10px;">
-        *     <dt><tt>filter</tt></dt>    <dd>Filters to apply to the list.  </dd>
-        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return.  <strong>default:20</strong></dd>
-        *     <dt><tt>offset</tt></dt>    <dd>Used in paging of the list.  This is the start offset of the page.  <strong>default:0</strong></dd>
+        *     <dt><tt>filter</tt></dt>    <dd><table class="filter_list"><tr><td>filter.id</td><td>Filter by the customer Id</td></tr><tr><td>filter.text</td><td>Can use this to filter by the name, email or reference for the customer</td></tr><tr><td>filter.dateCreatedMin<sup>*</sup></td><td>Filter by the minimum created date you are searching for - Date in UTC millis</td></tr><tr><td>filter.dateCreatedMax<sup>*</sup></td><td>Filter by the maximum created date you are searching for - Date in UTC millis</td></tr></table><br><sup>*</sup>Use dateCreatedMin with dateCreatedMax in the same filter if you want to search between two created dates  </dd>
+        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return. [min value: 0, max value: 50, default: 20]  </dd>
+        *     <dt><tt>offset</tt></dt>    <dd>Used in paging of the list.  This is the start offset of the page. [min value: 0, default: 0]  </dd>
         *     <dt><tt>sorting</tt></dt>    <dd>Allows for ascending or descending sorting of the list.  The value maps properties to the sort direction (either <tt>asc</tt> for ascending or <tt>desc</tt> for descending).  Sortable properties are: <tt> dateCreated</tt><tt> id</tt><tt> name</tt><tt> email</tt><tt> reference</tt>.</dd></dl>
         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
         * @return    ResourceList a ResourceList object that holds the list of Customer objects and the total
@@ -138,41 +142,23 @@ class Simplify_Customer extends Simplify_Object {
          * Updates an Simplify_Customer object.
          *
          * The properties that can be updated:
-         * <ul>
-         * <li>card.addressCity <strong>(required)</strong></li>
-         * 
-         * <li>card.addressCountry <strong>(required)</strong></li>
-         * 
-         * <li>card.addressLine1 <strong>(required)</strong></li>
-         * 
-         * <li>card.addressLine2 <strong>(required)</strong></li>
-         * 
-         * <li>card.addressState <strong>(required)</strong></li>
-         * 
-         * <li>card.addressZip <strong>(required)</strong></li>
-         * 
-         * <li>card.cvc <strong>(required)</strong></li>
-         * 
-         * <li>card.expMonth <strong>(required)</strong></li>
-         * 
-         * <li>card.expYear <strong>(required)</strong></li>
-         * 
-         * <li>card.id </li>
-         * 
-         * <li>card.name <strong>(required)</strong></li>
-         * 
-         * <li>card.number </li>
-         * 
-         * <li>email <strong>(required)</strong></li>
-         * 
-         * 
-         * 
-         * <li>name <strong>(required)</strong></li>
-         * 
-         * <li>reference </li>
-         * 
-         * <li>token </li>
-         * </ul>
+         * <dl style="padding-left:10px;">
+         *     <dt><tt>card.addressCity</tt></dt>    <dd>City of the cardholder. <strong>required </strong></dd>
+         *     <dt><tt>card.addressCountry</tt></dt>    <dd>Country code (ISO-3166-1-alpha-2 code) of residence of the cardholder. <strong>required </strong></dd>
+         *     <dt><tt>card.addressLine1</tt></dt>    <dd>Address of the cardholder. <strong>required </strong></dd>
+         *     <dt><tt>card.addressLine2</tt></dt>    <dd>Address of the cardholder if needed. <strong>required </strong></dd>
+         *     <dt><tt>card.addressState</tt></dt>    <dd>State of residence of the cardholder. State abbreviations should be used. <strong>required </strong></dd>
+         *     <dt><tt>card.addressZip</tt></dt>    <dd>Postal code of the cardholder. The postal code size is between 5 and 9 in length and only contain numbers or letters. <strong>required </strong></dd>
+         *     <dt><tt>card.cvc</tt></dt>    <dd>CVC security code of the card. This is the code on the back of the card. Example: 123 <strong>required </strong></dd>
+         *     <dt><tt>card.expMonth</tt></dt>    <dd>Expiration month of the card. Format is MM.  Example: January = 01 <strong>required </strong></dd>
+         *     <dt><tt>card.expYear</tt></dt>    <dd>Expiration year of the card. Format is YY. Example: 2013 = 13 <strong>required </strong></dd>
+         *     <dt><tt>card.id</tt></dt>    <dd>ID of card. If present, card details for the customer will not be updated. If not present, the customer will be updated with the supplied card details. </dd>
+         *     <dt><tt>card.name</tt></dt>    <dd>Name as appears on the card. <strong>required </strong></dd>
+         *     <dt><tt>card.number</tt></dt>    <dd>Card number as it appears on the card. [max length: 19, min length: 13] </dd>
+         *     <dt><tt>email</tt></dt>    <dd>Email address of the customer <strong>required </strong></dd>
+         *     <dt><tt>name</tt></dt>    <dd>Customer name [max length: 50, min length: 2] <strong>required </strong></dd>
+         *     <dt><tt>reference</tt></dt>    <dd>Reference field for external applications use. </dd>
+         *     <dt><tt>token</tt></dt>    <dd>If specified, card associated with card token will be added to the customer </dd></dl>
          * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
          * @return    Customer a Customer object.
          */

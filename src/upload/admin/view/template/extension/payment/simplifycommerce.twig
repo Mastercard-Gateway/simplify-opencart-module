@@ -110,6 +110,15 @@
                     {% endif %}</td>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_txn_mode }}</label>
+                    <div class="col-sm-10">
+                        <select name="payment_simplifycommerce_txn_mode" id="input-txn-mode" class="form-control">
+                            <option value="authorization" {% if 'authorization' == payment_simplifycommerce_txn_mode %}selected="selected"{% endif %}>{{ text_txn_mode_authorize }}</option>
+                            <option value="payment" {% if 'payment' == payment_simplifycommerce_txn_mode %}selected="selected"{% endif %}>{{ text_txn_mode_pay }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-2 control-label" for="input-order-status">{{ entry_order_status }}</label>
                     <div class="col-sm-10">
                         <select name="payment_simplifycommerce_order_status_id" id="input-order-status" class="form-control">

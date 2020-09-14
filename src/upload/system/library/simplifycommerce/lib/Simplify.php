@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2020 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -54,7 +54,7 @@ class Simplify
     /**
      * @var string $userAgent User-agent string send with requests.
      */
-    public static $userAgent = "OpenCart-Plugin/1.2.1";
+    public static $userAgent = "OpenCart-Plugin/2.1.0";
 
 }
 
@@ -65,16 +65,21 @@ require_once(dirname(__FILE__) . '/Simplify/PaymentsApi.php');
 require_once(dirname(__FILE__) . '/Simplify/Exceptions.php');
 require_once(dirname(__FILE__) . '/Simplify/Http.php');
 require_once(dirname(__FILE__) . '/Simplify/ResourceList.php');
+require_once(dirname(__FILE__) . '/Simplify/Authorization.php');
 require_once(dirname(__FILE__) . '/Simplify/CardToken.php');
 require_once(dirname(__FILE__) . '/Simplify/Chargeback.php');
 require_once(dirname(__FILE__) . '/Simplify/Coupon.php');
 require_once(dirname(__FILE__) . '/Simplify/Customer.php');
+require_once(dirname(__FILE__) . '/Simplify/DataToken.php');
 require_once(dirname(__FILE__) . '/Simplify/Deposit.php');
 require_once(dirname(__FILE__) . '/Simplify/Event.php');
+require_once(dirname(__FILE__) . '/Simplify/FraudCheck.php');
 require_once(dirname(__FILE__) . '/Simplify/Invoice.php');
 require_once(dirname(__FILE__) . '/Simplify/InvoiceItem.php');
+require_once(dirname(__FILE__) . '/Simplify/Tax.php');
 require_once(dirname(__FILE__) . '/Simplify/Payment.php');
 require_once(dirname(__FILE__) . '/Simplify/Plan.php');
 require_once(dirname(__FILE__) . '/Simplify/Refund.php');
 require_once(dirname(__FILE__) . '/Simplify/Subscription.php');
+require_once(dirname(__FILE__) . '/Simplify/TransactionReview.php');
 require_once(dirname(__FILE__) . '/Simplify/Webhook.php');

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2020 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -35,7 +35,7 @@ class Simplify_Constants
     /**
      * @var string VERSION SDK version information.
      */
-    const VERSION = '1.2.1';
+    const VERSION = '1.6.0';
 
     /**
      * @var string API_BASE_LIVE_URL URL for the live API endpoint
