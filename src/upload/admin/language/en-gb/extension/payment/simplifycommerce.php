@@ -16,14 +16,14 @@
  */
 
 // Heading
-$_['heading_title']      			= 'Simplify Commerce';
+$_['heading_title']      			= 'Mastercard Payment Gateway Services - Simplify';
 
 // Text 
 $_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce.jpg" alt="Simplify Commerce" title="Simplify Commerce" style="background-color: #909090; height: 30px"></a>';
 $_['text_test']       				= 'Sandbox';
 $_['text_prod']       				= 'Live';
 $_['text_payment']       			= 'Payment';
-$_['text_success']       			= 'Success: You have modified Simplify Commerce account details!';
+$_['text_success']       			= 'Success: You have modified your payment gateway account details!';
 $_['text_off']           			= 'Off';
 $_['text_disabled']           		= 'Disabled';
 $_['text_enabled']           		= 'Enabled';
