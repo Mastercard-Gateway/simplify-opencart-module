@@ -19,7 +19,8 @@
 $_['heading_title']      			= 'Mastercard Payment Gateway Services - Simplify';
 
 // Text 
-$_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce.png" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px"></a>';
+$_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce_module_logo.jpg" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px"></a>';
+$_['text_simplifycommerce_icon']	= '<img src="view/image/payment/simplifycommerce.png" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px">';
 $_['text_test']       				= 'Sandbox';
 $_['text_prod']       				= 'Live';
 $_['text_payment']       			= 'Payment';
