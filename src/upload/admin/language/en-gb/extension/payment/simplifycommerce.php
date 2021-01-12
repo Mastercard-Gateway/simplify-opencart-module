@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2019 Mastercard
+ * Copyright (c) 2013-2020 Mastercard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
  */
 
 // Heading
-$_['heading_title']      			= 'Simplify Commerce';
+$_['heading_title']      			= 'Mastercard Payment Gateway Services - Simplify';
 
 // Text 
-$_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce.jpg" alt="Simplify Commerce" title="Simplify Commerce" style="background-color: #909090; height: 30px"></a>';
+$_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce_module_logo.jpg" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px"></a>';
+$_['text_simplifycommerce_icon']	= '<img src="view/image/payment/simplifycommerce.png" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px">';
 $_['text_test']       				= 'Sandbox';
 $_['text_prod']       				= 'Live';
 $_['text_payment']       			= 'Payment';
-$_['text_success']       			= 'Success: You have modified Simplify Commerce account details!';
+$_['text_success']       			= 'Success: You have modified your payment gateway account details!';
 $_['text_off']           			= 'Off';
 $_['text_disabled']           		= 'Disabled';
 $_['text_enabled']           		= 'Enabled';
