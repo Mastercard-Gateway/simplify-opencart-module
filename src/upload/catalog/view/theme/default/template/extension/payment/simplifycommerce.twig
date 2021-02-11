@@ -48,12 +48,21 @@
 		<input id="embedded_token" type="text" name="cardToken" value="">
 	</form>
 	<script>
-		let jsScript = document.createElement('script')
-		jsScript.src = 'https://www.simplify.com/commerce/simplify.pay.js';
+		var simplifyInitialized;
 
-		document.body.appendChild(jsScript)
+		if (!simplifyInitialized) {
+			var jsScript = document.createElement('script')
+			jsScript.src = 'https://www.simplify.com/commerce/simplify.pay.js';
 
-		jsScript.addEventListener('load', function () {
+			document.body.appendChild(jsScript)
+
+			jsScript.addEventListener('load', initializeSimplify)
+		} else {
+			initializeSimplify();
+		}
+
+		function initializeSimplify() {
+			simplifyInitialized = true;
 			SimplifyCommerce.hostedPayments(function (response) {
 				if (response && response.length > 0 && response[0].error) {
 					return;
@@ -62,12 +71,11 @@
 				if (response && response.cardToken) {
 					$('#embedded_token').val(response.cardToken);
 					$('#embedded_form').trigger('submit');
-					console.log("SUCCESS OPERATION");
 				}
 			}, {
 				scKey: "{{ pub_key  }}",
 				operation: "create.token"
 			})
-		})
+		}
 	</script>
 {% endif %}
