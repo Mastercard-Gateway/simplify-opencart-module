@@ -45,6 +45,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
         }
 
         $data['button_color'] = $this->config->get('payment_simplifycommerce_button_color');
+        $data['integration_model'] = $this->config->get('payment_simplifycommerce_integration_model');
 
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 

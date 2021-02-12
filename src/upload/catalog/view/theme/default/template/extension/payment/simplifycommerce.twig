@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #}
-{% if false %}
+{% if integration_model == 'modal' %}
 <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
 <div class="form-horizontal" id="payment">
 	<div class="buttons">
@@ -73,7 +73,7 @@
 					$('#embedded_form').trigger('submit');
 				}
 			}, {
-				scKey: "{{ pub_key  }}",
+				scKey: "{{ pub_key }}",
 				operation: "create.token"
 			})
 		}

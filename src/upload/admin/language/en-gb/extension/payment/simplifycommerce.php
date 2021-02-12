@@ -49,6 +49,8 @@ $_['text_confirm_void']             = 'Are you sure you want to void this author
 $_['text_date_created']             = 'Date';
 $_['text_txn_successful']           = 'Transaction created successfully';
 $_['text_payment_txn_info']         = 'Transactions';
+$_['text_modal']                    = 'Modal';
+$_['text_embedded']                 = 'Embedded';
 
 // Entry
 $_['entry_livesecretkey']     		= 'Live Private API Key:';
@@ -64,6 +66,7 @@ $_['entry_test']					= 'Account Mode:';
 $_['entry_payment_mode']            = 'Payment Mode:';
 $_['entry_button_color']            = 'Hosted Payments Button Color:';
 $_['entry_order_status'] 			= 'Successful Order Status:';
+$_['entry_integration_model']       = 'Integration Model';
 $_['entry_declined_order_status'] 	= 'Declined Order Status:';
 $_['entry_geo_zone']     			= 'Geo Zone:';
 $_['entry_status']       			= 'Status:';
