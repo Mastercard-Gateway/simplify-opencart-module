@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #}
+{% if integration_model == 'modal' %}
 <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
 <div class="form-horizontal" id="payment">
 	<div class="buttons">
@@ -30,3 +31,51 @@
 	  </div>
 	</div>
 </div>
+{% else %}
+	<iframe name="simplify_embedded"
+			width="100%"
+			height="450px"
+			data-color="{{ button_color }}"
+			data-sc-key="{{ pub_key  }}"
+			data-name="{{ store_name }}"
+			data-reference="{{ description }}"
+			data-amount="{{ amount }}"
+			data-operation="create.token"
+			data-receipt="false"
+	></iframe>
+
+	<form id="embedded_form" action="{{ redirect_url }}" method="post" style="display: none">
+		<input id="embedded_token" type="text" name="cardToken" value="">
+	</form>
+	<script>
+		var simplifyInitialized;
+
+		if (!simplifyInitialized) {
+			var jsScript = document.createElement('script')
+			jsScript.src = 'https://www.simplify.com/commerce/simplify.pay.js';
+
+			document.body.appendChild(jsScript)
+
+			jsScript.addEventListener('load', initializeSimplify)
+		} else {
+			initializeSimplify();
+		}
+
+		function initializeSimplify() {
+			simplifyInitialized = true;
+			SimplifyCommerce.hostedPayments(function (response) {
+				if (response && response.length > 0 && response[0].error) {
+					return;
+				}
+
+				if (response && response.cardToken) {
+					$('#embedded_token').val(response.cardToken);
+					$('#embedded_form').trigger('submit');
+				}
+			}, {
+				scKey: "{{ pub_key  }}",
+				operation: "create.token"
+			})
+		}
+	</script>
+{% endif %}
