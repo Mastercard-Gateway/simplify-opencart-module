@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2019 Mastercard
+ * Copyright (c) 2013-2021 Mastercard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 
 class ControllerExtensionPaymentSimplifyCommerce extends Controller
 {
-
     private function calcAmount($order_info)
     {
         return 100 * $this->currency->format($order_info['total'], $order_info['currency_code'],
@@ -78,6 +77,9 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
                 'value' => strftime('%y', mktime(0, 0, 0, 1, 1, $i))
             );
         }
+
+        $data['embedded_form_css'] = 'catalog/view/javascript/simplifycommerce/embedded-payment-form.css';
+        $data['payment_title'] = $this->config->get('payment_simplifycommerce_title');
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/simplifycommerce')) {
             return $this->load->view($this->config->get('config_template') . '/template/extension/payment/simplifycommerce',
@@ -159,7 +161,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
                         throw new Exception($this->language->get('payment_declined'));
                     }
 
-                    $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($order_id) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount). "', date_added = NOW()");
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "simplifycommerce_order_transaction SET order_id ='" . $this->db->escape($order_id) . "', transaction_id = '" . $this->db->escape($charge->id) . "', type = '" . $txnMode . "', status = '" . $status . "', amount = '" . $this->db->escape($charge->amount) . "', date_added = NOW()");
 
                     $this->model_checkout_order->addOrderHistory(
                         $order_id,
