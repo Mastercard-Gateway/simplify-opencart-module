@@ -20,7 +20,6 @@
     }
 
     .simplify-embedded-iframe-wrapper {
-        max-width: 500px;
         margin-left: -15px;
     }
 }
@@ -31,12 +30,9 @@
     }
 }
 
-.simplify-embedded-iframe-wrapper {
-    width: 100%;
-    height: 450px;
-}
-
 .simplify-embedded-iframe-wrapper iframe {
     border: none;
+    overflow: hidden;
+    min-height: 450px;
 }
 
