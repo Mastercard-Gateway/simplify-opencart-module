@@ -11,10 +11,13 @@ All notable changes to this project will be documented in this file.
 ## [2.1.0] - 2020-10-23
 ### Changed
 - Adds Authorize + Capture transaction modes
+- Making changes to make plugin function with non ISO-8859-1 Characters (Greek, Arabic...)
+- Running 'store_name' through a translit operation before using it
 
 
 ## [2.0.0] - 2021-10-19
 ### Changed
+- Major release to remove the standard payment form integration. Only hosted payments can now be made from the plugin.
 - Compatibility with OpenCart 3.0.3.1
 - Removed standard (form) integration
 
