@@ -41,22 +41,33 @@ Version v2.1.0
 6. Scroll down until you find the Simplify Commerce extension and then click on +(Install) button.
 
 ## Configuration
-Login to your the OpenCart administration application
+Please proceed with the following actions to configure the payment method:
 
-1. Go to Extension > Extensions
-2. From the extension type filter, choose Payments
-3. Scroll down until you find 'Simplify Commerce' extension, click on Edit button
-4. Enter your public and private API keys into the appropriate fields for the live and sandbox mode. For information on your API keys go to https://www.simplify.com/commerce/docs/misc/index. NOTE: When using Hosted Payments, you must create and use an API key pair which has Hosted Payments enabled. 
-5. Enter a Payment Title. This will be the name shown to your users on the checkout form.
-6. Map the Successful and Declined status to suit your own workflow. This does not affect the Simplify Commerce configuration.
-7. If you use multiple Payment Providers you can use Sort Order to configure how they're shown on the checkout form.
-8. Don't forget to Enable the extension to activate it.
+1. Log in to your OpenCart administration application.
+2. Go to Extension > Extensions
+3. From the extension type filter, choose Payments
+4. Scroll down until you find 'Simplify Commerce' extension, click on Edit button
+5. Enter your public and private API keys into the appropriate fields for the live and sandbox mode. For information on your API keys go to https://www.simplify.com/commerce/docs/misc/index. NOTE: When using Hosted Payments, you must create and use an API key pair which has Hosted Payments enabled. 
+6. Enter a Payment Title. This will be the name shown to your users on the checkout form.
+7. Choose between Modal and Embedded Integration Model.   
+8. Map the Successful and Declined status to suit your own workflow. This does not affect the Simplify Commerce configuration.
+9. If you use multiple Payment Providers you can use Sort Order to configure how they're shown on the checkout form.
+19. Don't forget to Enable the extension to activate it.
 
-## Hosted Payments Mode
-Customer will be presented with a button to confirm the order which when clicked will launch a secure form where the customer can input their card details.
+## Hosted Payments 
 
-![Hosted Payments Button](hp1.png "Hosted Payments Button")
+### Modal Integration Mode
+
+The customer will be presented with a button to confirm the order, which, when clicked, will launch a secure form where the customer can input their card details.
+
+![Hosted Payments Button](docs/hp1.png "Hosted Payments Button")
 
 If your website has an SSL certificate with HTTPS enabled, then the form will be overlayed on top of the existing webpage. Otherwise user will be taken to a secured page in a new window. When the customer completes the payment, he will be taken back to the success page.
 
-![Hosted Payments Checkout View](hp2.png "Hosted Payments Checkout View")
+![Hosted Payments Checkout View](docs/hp2.png "Hosted Payments Checkout View")
+
+### Embedded Integration Mode
+
+A secure payment form will be presented right on the checkout page. The customer can input their card details into that form and submit it to place an order.
+
+![Embedded Payments Checkout View](docs/ep1.png "Embedded Payments Checkout View")

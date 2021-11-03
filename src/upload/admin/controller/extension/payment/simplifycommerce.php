@@ -182,6 +182,12 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
             $data['payment_simplifycommerce_title'] = $this->config->get('payment_simplifycommerce_title') ?: 'Pay with Card';
         }
 
+        if (isset($this->request->post['payment_simplifycommerce_integration_model'])) {
+            $data['payment_simplifycommerce_integration_model'] = $this->request->post['payment_simplifycommerce_integration_model'];
+        } else {
+            $data['payment_simplifycommerce_integration_model'] = $this->config->get('payment_simplifycommerce_integration_model') ?: 'modal';
+        }
+
         $this->load->model('localisation/order_status');
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
