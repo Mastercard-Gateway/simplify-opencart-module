@@ -278,6 +278,7 @@ class ControllerExtensionPaymentSimplifyCommerce extends Controller
         $this->model_extension_payment_simplifycommerce->install();
         $this->model_extension_payment_simplifycommerce->deleteEvents();
         $this->model_extension_payment_simplifycommerce->addEvents();
+
     }
 
     public function uninstall()

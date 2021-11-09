@@ -36,3 +36,6 @@
     min-height: 450px;
 }
 
+.simplify-embedded-form {
+    display: none;
+}

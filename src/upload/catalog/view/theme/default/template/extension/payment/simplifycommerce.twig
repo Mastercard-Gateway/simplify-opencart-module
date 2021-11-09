@@ -14,7 +14,6 @@
 # limitations under the License.
 #}
 {% if integration_model == 'modal' %}
-    <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.pay.js"></script>
     <div class="form-horizontal" id="payment">
         <div class="buttons">
             <div class="pull-right">
@@ -31,6 +30,18 @@
             </div>
         </div>
     </div>
+    <script>
+        function initializeSimplify() {
+            if (typeof SimplifyCommerce == 'undefined') {
+                setTimeout(initializeSimplify, 500);
+                return;
+            }
+
+            SimplifyCommerce.hostedPayments();
+        }
+
+        initializeSimplify();
+    </script>
 {% else %}
     <h3 class="simplify-embedded-payment-title text-left">{{ payment_title }}</h3>
     <div class="simplify-embedded-error" style="display: none;"></div>
@@ -44,43 +55,27 @@
                 data-operation="create.token"
                 data-receipt="false"></iframe>
     </div>
-
-    <form id="embedded_form" action="{{ redirect_url }}" method="post" style="display: none">
-        <input id="embedded_token" type="text" name="cardToken" value="">
+    <form id="simplify_embedded_form" class="simplify-embedded-form" action="{{ redirect_url }}" method="post">
+        <input id="simplify_embedded_token" type="text" name="cardToken" value="">
     </form>
     <script>
-        var simplifyInitialized;
-        if (!simplifyInitialized) {
-            var cssStyles = document.createElement('link');
-            cssStyles.href = '{{ embedded_form_css }}';
-            cssStyles.async = true;
-            cssStyles.rel = 'stylesheet';
-            document.body.appendChild(cssStyles);
-
-            var jsScript = document.createElement('script');
-            jsScript.src = 'https://www.simplify.com/commerce/simplify.pay.js';
-            document.body.appendChild(jsScript);
-
-            jsScript.addEventListener('load', initializeSimplify);
-        } else {
-            initializeSimplify();
-        }
-
         function initializeSimplify() {
             if (typeof SimplifyCommerce == 'undefined') {
+                setTimeout(initializeSimplify, 500);
                 return;
             }
 
-            simplifyInitialized = true;
             SimplifyCommerce.hostedPayments(function (response) {
                 if (response && response.cardToken) {
-                    $('#embedded_token').val(response.cardToken);
-                    $('#embedded_form').trigger('submit');
+                    $('#simplify_embedded_token').val(response.cardToken);
+                    $('#simplify_embedded_form').trigger('submit');
                 }
             }, {
                 scKey: "{{ pub_key }}",
                 operation: "create.token"
             });
         }
+
+        initializeSimplify();
     </script>
 {% endif %}
