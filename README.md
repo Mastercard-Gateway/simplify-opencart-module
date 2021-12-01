@@ -32,9 +32,12 @@ Version v2.0.0
 Version v2.1.0
 - Adds Authorize + Capture transaction modes
 
-Version 2.2.0
+Version v2.2.0
 - Added embedded option on checkout
 - Changed branding and some terminology 
+
+Version v2.3.0
+- Updated a way of adding necessary Styles and Scripts to the Checkout Page
 
 ## Installation
 1. Make a backup of your site before applying new mods etc.
