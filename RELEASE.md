@@ -27,14 +27,15 @@ Leave release description blank for now.
 Click on the "Publish release" button.
 
 ## 3. Create dist
-In local repo, enter following commands to create a dist zip file, in the example 1.0.1 is used, make sure this is replaced by the correct tag name
+In local repo, enter following commands to create a dist zip file, in the example 1.0.1 is used, make sure this is replaced by the correct tag name. 
+For the OpenCart extension, it is essential to keep the src folder only in the installation package.
 
 ```
 git fetch --tags --all
-git archive 1.0.1 -o module-dist.zip
+git archive 1.0.1:src -o simplify-opencart-module.ocmod.zip
 ```
 
-Created file module-dist.zip contains the distributable code for this module.
+Created file simplify-opencart-module.ocmod.zip contains the distributable code for this module.
 
 ## 4. Add assets and finalise the release
 In the Github UI, switch to edit the release you created in step 2. The URL will contain something like /edit/1.0.1, for example.
