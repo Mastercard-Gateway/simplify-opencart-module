@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2019 Mastercard
+ * Copyright (c) 2013-2021 Mastercard
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
     const AUTHORIZE = 'authorization';
     const PAYMENT = 'payment';
 
-    public function getOrder($order_id) {
-
+    public function getOrder($order_id)
+    {
         $this->load->model('sale/order');
         $order_info = $this->model_sale_order->getOrder($order_id);
 
@@ -34,10 +34,12 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
 
     /**
      * @param string $order_id
+     *
      * @return array
      */
-    public function getTransactions($order_id) {
-        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "simplifycommerce_order_transaction` WHERE `order_id` = '" . $this->db->escape($order_id) . "'");
+    public function getTransactions($order_id)
+    {
+        $query = $this->db->query("SELECT * FROM `".DB_PREFIX."simplifycommerce_order_transaction` WHERE `order_id` = '".$this->db->escape($order_id)."'");
 
         $transactions = array();
         if ($query->num_rows) {
@@ -45,16 +47,19 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
                 $transactions[] = $this->rowTxn($row);
             }
         }
+
         return $transactions;
     }
 
     /**
      * @param string $order_id
      * @param string $txn_id
+     *
      * @return array|bool
      */
-    public function getTransaction($order_id, $txn_id) {
-        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "simplifycommerce_order_transaction` WHERE `order_id` = '" . $this->db->escape($order_id) . "' AND `transaction_id` = '" . $this->db->escape($txn_id) . "' LIMIT 1");
+    public function getTransaction($order_id, $txn_id)
+    {
+        $query = $this->db->query("SELECT * FROM `".DB_PREFIX."simplifycommerce_order_transaction` WHERE `order_id` = '".$this->db->escape($order_id)."' AND `transaction_id` = '".$this->db->escape($txn_id)."' LIMIT 1");
 
         $transactions = array();
         if ($query->num_rows) {
@@ -65,17 +70,21 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
         if (!empty($transactions)) {
             return $transactions[0];
         }
+
         return false;
     }
 
     /**
      * @param array $row
+     *
      * @return array
      */
-    protected function rowTxn($row) {
+    protected function rowTxn($row)
+    {
         $amount = ($row['amount'] / 100);
         $amount = round($amount, 2);
         $row['amount'] = number_format($amount, 2);
+
         return $row;
     }
 
@@ -83,14 +92,14 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
     public function install()
     {
         $this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "simplifycommerce_order_transaction` (
+			CREATE TABLE IF NOT EXISTS `".DB_PREFIX."simplifycommerce_order_transaction` (
 			  `simplifycommerce_order_transaction_id` INT(11) NOT NULL AUTO_INCREMENT,
               `order_id` int(11) NOT NULL,
 			  `transaction_id` varchar(255),
 			  `date_added` DATETIME NOT NULL,
 			  `type` ENUM('payment', 'authorization', 'capture', 'refund', 'cancel') DEFAULT NULL,
 			  `status` ENUM('Open', 'Pending', 'Completed', 'Suspended', 'Declined', 'Closed', 'Canceled') DEFAULT NULL,
-			  `amount` DECIMAL( 10, 2 ) NOT NULL,
+			  `amount` DECIMAL(10, 2) NOT NULL,
 			  PRIMARY KEY (`simplifycommerce_order_transaction_id`)
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
         ");
@@ -98,16 +107,26 @@ class ModelExtensionPaymentSimplifyCommerce extends Model
 
     public function uninstall()
     {
-        $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "simplifycommerce_order_transaction`;");
+        $this->db->query("DROP TABLE IF EXISTS `".DB_PREFIX."simplifycommerce_order_transaction`;");
     }
 
     public function deleteEvents()
     {
         $this->load->model('setting/event');
+
+        $this->model_setting_event->deleteEventByCode(
+            'simplifycommerce_update_page_header'
+        );
     }
 
     public function addEvents()
     {
         $this->load->model('setting/event');
+
+        $this->model_setting_event->addEvent(
+            'simplifycommerce_update_page_header',
+            'catalog/view/common/header/before',
+            'extension/payment/simplifycommerce/update_page_header'
+        );
     }
 }

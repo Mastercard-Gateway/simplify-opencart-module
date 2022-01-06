@@ -2,10 +2,15 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.3.0] - 2021-12-01
+### Changed
+- Updated a way of adding necessary Styles and Scripts to the Checkout Page
+
+
 ## [2.2.0] - 2021-10-19
 ### Changed
-+ Branding Update
-+ Add Embedded Payment Option
+- Branding Update
+- Add Embedded Payment Option
 
 
 ## [2.1.0] - 2020-10-23
