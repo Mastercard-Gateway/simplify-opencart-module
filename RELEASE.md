@@ -32,7 +32,8 @@ For the OpenCart extension, it is essential to keep the src folder only in the i
 
 ```
 git fetch --tags --all
-git archive 1.0.1:src -o simplify-opencart-module.ocmod.zip
+git checkout 1.0.1
+make
 ```
 
 Created file simplify-opencart-module.ocmod.zip contains the distributable code for this module.
@@ -40,7 +41,7 @@ Created file simplify-opencart-module.ocmod.zip contains the distributable code 
 ## 4. Add assets and finalise the release
 In the Github UI, switch to edit the release you created in step 2. The URL will contain something like /edit/1.0.1, for example.
 
-Upload the module-dist.zip into the designated area in the release edit page.
+Upload the simplify-opencart-module.ocmod.zip into the designated area in the release edit page.
 
 Populate the release description with the information about the version that you can find in the [CHANGELOG.md](CHANGELOG.md) file.
 
