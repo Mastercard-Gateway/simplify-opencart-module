@@ -18,7 +18,7 @@
 // Heading
 $_['heading_title']      			= 'Mastercard Payment Gateway Services - Simplify';
 
-// Text 
+// Text
 $_['text_simplifycommerce']	 		= '<a href="http://www.simplify.com" target="_blank"><img src="view/image/payment/simplifycommerce_module_logo.jpg" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px"></a>';
 $_['text_simplifycommerce_icon']	= '<img src="view/image/payment/simplifycommerce.png" alt="Mastercard Payment Gateway Services - Simplify" title="Mastercard Payment Gateway Services - Simplify" style="background-color: #909090; height: 30px">';
 $_['text_test']       				= 'Sandbox';
@@ -49,8 +49,8 @@ $_['text_confirm_void']             = 'Are you sure you want to void this author
 $_['text_date_created']             = 'Date';
 $_['text_txn_successful']           = 'Transaction created successfully';
 $_['text_payment_txn_info']         = 'Transactions';
-$_['text_modal']                    = 'Modal';
-$_['text_embedded']                 = 'Embedded';
+$_['text_modal']                    = 'Modal Payment Form';
+$_['text_embedded']                 = 'Embedded Payment Form';
 
 // Entry
 $_['entry_livesecretkey']     		= 'Live Private API Key:';
@@ -66,7 +66,7 @@ $_['entry_test']					= 'Account Mode:';
 $_['entry_payment_mode']            = 'Payment Mode:';
 $_['entry_button_color']            = 'Hosted Payments Button Color:';
 $_['entry_order_status'] 			= 'Successful Order Status:';
-$_['entry_integration_model']       = 'Integration Model';
+$_['entry_integration_model']       = 'Hosted Payment Method';
 $_['entry_declined_order_status'] 	= 'Declined Order Status:';
 $_['entry_geo_zone']     			= 'Geo Zone:';
 $_['entry_status']       			= 'Status:';
