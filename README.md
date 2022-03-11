@@ -39,6 +39,9 @@ Version v2.2.0
 Version v2.3.0
 - Updated a way of adding necessary Styles and Scripts to the Checkout Page
 
+Version v2.4.0
+- Rename Integration Model Field and Value Names on the extension Configuration page
+
 ## Installation
 1. Make a backup of your site before applying new mods etc.
 2. Download .ocmod.zip file of the latest release of the extension from https://github.com/simplifycom/simplify-opencart-module/releases/latest

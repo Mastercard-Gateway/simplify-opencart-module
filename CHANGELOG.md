@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2022-03-11
+### Changed
+- Rename Integration Model Field and Value Names on the extension Configuration page
+
 
 ## [2.3.0] - 2021-12-01
 ### Changed
