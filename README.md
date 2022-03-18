@@ -39,6 +39,9 @@ Version v2.2.0
 Version v2.3.0
 - Updated a way of adding necessary Styles and Scripts to the Checkout Page
 
+Version v2.4.0
+- Rename Integration Model Field and Value Names on the extension Configuration page
+
 ## Installation
 1. Make a backup of your site before applying new mods etc.
 2. Download .ocmod.zip file of the latest release of the extension from https://github.com/simplifycom/simplify-opencart-module/releases/latest
@@ -56,14 +59,14 @@ Please proceed with the following actions to configure the payment method:
 4. Scroll down until you find 'Simplify Commerce' extension, click on Edit button
 5. Enter your public and private API keys into the appropriate fields for the live and sandbox mode. For information on your API keys go to https://www.simplify.com/commerce/docs/misc/index. NOTE: When using Hosted Payments, you must create and use an API key pair which has Hosted Payments enabled. 
 6. Enter a Payment Title. This will be the name shown to your users on the checkout form.
-7. Choose between Modal and Embedded Integration Model.   
+7. Choose between Modal and Embedded Hosted Payment Method.   
 8. Map the Successful and Declined status to suit your own workflow. This does not affect the Simplify Commerce configuration.
 9. If you use multiple Payment Providers you can use Sort Order to configure how they're shown on the checkout form.
 19. Don't forget to Enable the extension to activate it.
 
 ## Hosted Payments 
 
-### Modal Integration Mode
+### Modal Payment Form
 
 The customer will be presented with a button to confirm the order, which, when clicked, will launch a secure form where the customer can input their card details.
 
@@ -73,7 +76,7 @@ If your website has an SSL certificate with HTTPS enabled, then the form will be
 
 ![Hosted Payments Checkout View](docs/hp2.png "Hosted Payments Checkout View")
 
-### Embedded Integration Mode
+### Embedded Payment Form
 
 A secure payment form will be presented right on the checkout page. The customer can input their card details into that form and submit it to place an order.
 
