@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <style>
+            
+            table {
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Dear {{ customer_name }},</p>
+        
+        {% for txn in simplifycommerce_order.transactions %}
+            {% if txn.type == "capture" and mail_type == "Capture" %}
+                <p>Your payment against this order is successfully captured. Please find order details below.</p>
+                <table style="border-collapse: collapse; width: 100%; border-top: 1px solid #DDDDDD; border-left: 1px solid #DDDDDD; margin-bottom: 20px;">
+                    <thead>
+                      <tr>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;" colspan="2">Order details</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                        <b>Date Added : </b> {{ txn.date_added }}  <br/>
+                        <b>Order ID:</b> {{ txn.order_id }}<br/>
+                        <b>Transaction ID:</b> {{ txn.transaction_id }}<br/>
+                        <b>Transaction Status:</b>{{ txn.status }}<br/> </td>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                          <b>Email :</b> {{ receiver_address }}<br/>
+                          <b>Captured Amount: </b> {{ currency }}{{ txn.amount }}<br/>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+            {% elseif txn.type == "refund" and txn.status == "Refunded" and mail_type == "Refunded" %}
+                <p>Your payment against this order is successfully refunded. Please find order details below.</p>
+                <table style="border-collapse: collapse; width: 100%; border-top: 1px solid #DDDDDD; border-left: 1px solid #DDDDDD; margin-bottom: 20px;">
+                    <thead>
+                      <tr>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;" colspan="2">Order details</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                        <b>Date Added : </b> {{ txn.date_added }}  <br/>
+                        <b>Order ID:</b> {{ txn.order_id }}<br/>
+                        <b>Transaction ID:</b> {{ txn.transaction_id }}<br/>
+                        <b>Transaction Status:</b>{{ txn.status }}<br/> </td>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                          <b>Email :</b> {{ receiver_address }}<br/>
+                          <b>Refunded Amount: </b> {{ currency }}{{ txn.amount }}<br/>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+            {% elseif txn.type == "refund" and txn.status == "Partially Refunded" and mail_type == "Partially Refunded" %}
+                <p>Your payment against this order is successfully refunded. Please find order details below.</p>
+                <table style="border-collapse: collapse; width: 100%; border-top: 1px solid #DDDDDD; border-left: 1px solid #DDDDDD; margin-bottom: 20px;">
+                    <thead>
+                      <tr>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;" colspan="2">Order details</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                        <b>Date Added : </b> {{ txn.date_added }}  <br/>
+                        <b>Order ID:</b> {{ txn.order_id }}<br/>
+                        <b>Transaction ID:</b> {{ txn.transaction_id }}<br/>
+                        <b>Transaction Status:</b>{{ txn.status }}<br/> </td>
+                        <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                          <b>Email :</b> {{ receiver_address }}<br/>
+                          <b>Refunded Amount: </b> {{ currency }}{{ txn.amount | number_format(2, '.', ',') }}<br/>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                 {% elseif  mail_type == "Expired" %}
+                <p>Error occured during capturing the transaction.Authorization for the card is expired.  Please find order details below.</p>
+                <table style="border-collapse: collapse; width: 100%; border-top: 1px solid #DDDDDD; border-left: 1px solid #DDDDDD; margin-bottom: 20px;">
+                    <thead>
+                      <tr>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 7px; color: #222222;" colspan="2">Order details</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                        <b>Date Added : </b> {{ txn.date_added }}  <br/>
+                        <b>Order ID:</b> {{ txn.order_id }}<br/>
+                        <b>Transaction ID:</b> {{ txn.transaction_id }}<br/>
+                        <b>Transaction Status:</b>{{ txn.status }}<br/> </td>
+                        <td style="font-size: 12px; border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;">
+                          <b>Email :</b> {{ receiver_address }}<br/>
+                          <b>Refunded Amount: </b> {{ currency }}{{ txn.amount | number_format(2, '.', ',') }}<br/>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endfor %}
+        <p style="margin-top: 0px; margin-bottom: 20px;">Please Don't reply to this email</p>
+    </body>
+</html>

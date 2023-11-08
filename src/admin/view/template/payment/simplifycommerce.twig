@@ -1,0 +1,220 @@
+{#
+# Copyright (c) 2013-2023 Mastercard
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-payment" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ text_simplifycommerce_icon }} {{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-payment" action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+          <div class="row mb-3 required">
+            <label for="input-payable" class="col-sm-2 col-form-label">{{ entry_test }}</label>
+            <div class="col-sm-10">
+                {% if payment_simplifycommerce_test %}
+                    <div class="form-check">
+                        <input type="radio" name="payment_simplifycommerce_test" value="1" class="form-check-input" checked="checked" />
+                        <label class="form-check-label">{{ text_test }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="payment_simplifycommerce_test" value="0" class="form-check-input" />
+                        <label class="form-check-label">{{ text_prod }}</label>
+                    </div>
+                {% else %}
+                    <div class="form-check">
+                        <input type="radio" name="payment_simplifycommerce_test" value="1" class="form-check-input" />
+                        <label class="form-check-label">{{ text_test }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="payment_simplifycommerce_test" value="0" class="form-check-input" checked="checked" />
+                        <label class="form-check-label">{{ text_prod }}</label>
+                    </div>
+                {% endif %}
+                
+            </div>
+          </div>
+          <div class="row mb-3 required">
+            <label for="simplifycommerce_button_color" class="col-sm-2 col-form-label">{{ entry_button_color }}</label>
+            <div class="col-sm-10">
+                <input type="text" id="simplifycommerce_button_color" name="payment_simplifycommerce_button_color" value="{{ payment_simplifycommerce_button_color }}" class="form-control"/>
+                <script>
+                            $("#simplifycommerce_button_color").spectrum({
+                                showInput: true,
+                                preferredFormat: "hex",
+                                clickoutFiresChange: true
+                            });
+                </script>
+            </div>
+          </div>
+          <div class="row mb-3 required">
+            <label for="livesecretkey" class="col-sm-2 col-form-label">{{ entry_livesecretkey }}</label>
+            <div class="col-sm-10">
+                <input type="password" name="payment_simplifycommerce_livesecretkey" value="{{ payment_simplifycommerce_livesecretkey }}" class="form-control" id="livesecretkey"/>
+            </div>
+            {% if error_livesecretkey %}
+                <div class="text-danger"><b>{{ error_livesecretkey }}</b></div>
+            {% endif %}
+          </div>
+          <div class="row mb-3 required">
+            <label for="livepubkey" class="col-sm-2 col-form-label">{{ entry_livepubkey }}</label>
+            <div class="col-sm-10">
+                <input type="text" name="payment_simplifycommerce_livepubkey" value="{{ payment_simplifycommerce_livepubkey }}" class="form-control" id="livepubkey"/>
+            </div>
+            {% if error_livepubkey %}
+                <div class="text-danger"><b>{{ error_livepubkey }}</b></div>
+            {% endif %}
+          </div>
+          <div class="row mb-3 required">
+            <label for="testsecretkey" class="col-sm-2 col-form-label">{{ entry_testsecretkey }}</label>
+            <div class="col-sm-10">
+                <input type="password" name="payment_simplifycommerce_testsecretkey" value="{{ payment_simplifycommerce_testsecretkey }}"  class="form-control" id="testsecretkey" />
+            </div>
+            {% if error_testsecretkey %}
+                <div class="text-danger"><b>{{ error_testsecretkey }}</b></div>
+            {% endif %}
+          </div>
+
+          <div class="row mb-3 required">
+            <label for="testpubkey" class="col-sm-2 col-form-label">{{ entry_testpubkey }}</label>
+            <div class="col-sm-10">
+                <input type="text" name="payment_simplifycommerce_testpubkey" value="{{ payment_simplifycommerce_testpubkey }}"  class="form-control" id="testpubkey" />
+            </div>
+            {% if error_testpubkey %}
+                <div class="text-danger"><b>{{ error_testpubkey }}</b></div>
+            {% endif %}
+          </div>
+
+          <div class="row mb-3 required">
+            <label for="sc-title" class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+                <input type="text" name="payment_simplifycommerce_title" value="{{ payment_simplifycommerce_title }}"  class="form-control" id="sc-title" />
+            </div>
+            {% if error_title %}
+                <div class="text-danger"><b>{{ error_title }}</b></div>
+            {% endif %}
+          </div>
+
+          <div class="row mb-3">
+            <label for="integration-model" class="col-sm-2 col-form-label">{{ entry_integration_model }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_integration_model" id="integration-model" class="form-select">
+                    {% if payment_simplifycommerce_integration_model == 'modal' %}
+                        <option value="modal" selected="selected">{{ text_modal }}</option>
+                        <option value="embedded">{{ text_embedded }}</option>
+                    {% else %}
+                        <option value="modal">{{ text_modal }}</option>
+                        <option value="embedded" selected="selected">{{ text_embedded }}</option>
+                    {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-geo-zone" class="col-sm-2 col-form-label">{{ entry_txn_mode }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_txn_mode" id="input-txn-mode" class="form-select">
+                <option value="authorization" {% if 'authorization' == payment_simplifycommerce_txn_mode %}selected="selected"{% endif %}>{{ text_txn_mode_authorize }}</option>
+                <option value="payment" {% if 'payment' == payment_simplifycommerce_txn_mode %}selected="selected"{% endif %}>{{ text_txn_mode_pay }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-order-status" class="col-sm-2 col-form-label">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_order_status_id" id="input-order-status" class="form-select">
+                    {% for order_status in order_statuses %}
+                        {% if order_status.order_status_id  ==  payment_simplifycommerce_order_status_id %}
+                            <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                        {% else %}
+                            <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-declined-order-status" class="col-sm-2 col-form-label">{{ entry_declined_order_status }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_declined_order_status_id" id="input-declined-order-status" class="form-select">
+                    {% for declined_order_status in order_statuses %}
+                        {% if declined_order_status.order_status_id  == payment_simplifycommerce_declined_order_status_id %}
+                            <option value="{{ declined_order_status.order_status_id }}" selected="selected">{{ declined_order_status.name }}</option>
+                        {% else %}
+                            <option value="{{ declined_order_status.order_status_id }}">{{ declined_order_status.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-geo-zone" class="col-sm-2 col-form-label">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_geo_zone_id" id="input-geo-zone" class="form-select">
+                    <option value="0">{{ text_all_zones }}</option>
+                            {% for geo_zone in geo_zones %}
+                                {% if geo_zone.geo_zone_id  == payment_simplifycommerce_geo_zone_id %}
+                                    <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                                {% else %}
+                                    <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+                <select name="payment_simplifycommerce_status" id="input-status" class="form-select">
+                    {% if payment_simplifycommerce_status %}
+                        <option value="1" selected="selected">{{ text_enabled }}</option>
+                        <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                        <option value="1">{{ text_enabled }}</option>
+                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+                <input type="text" name="payment_simplifycommerce_sort_order" value="{{ payment_simplifycommerce_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
