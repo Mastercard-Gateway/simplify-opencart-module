@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2023-09-27
+### Changed
+- Compactable with PHP 8.1 and Opencart 4.0.2.2
+- Added Refund, Partail Refund Options
+
 ## [2.4.0] - 2022-03-11
 ### Changed
 - Rename Integration Model Field and Value Names on the extension Configuration page

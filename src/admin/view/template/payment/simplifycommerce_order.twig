@@ -1,0 +1,323 @@
+<h2>{{ text_payment_txn_info }}</h2>
+{% for txn in simplifycommerce_order.transactions %}
+
+<div class="transaction_response_message" id="simplify_transaction_msg_{{ txn.transaction_id }}"  style="display: none"></div>
+<table class="table table-striped table-bordered simplify_transaction_details">
+	<tr>
+		<td>{{ text_date_created }}</td>  
+		<td>{{ txn.date_added }}</td>
+	</tr>
+	<tr>
+		<td>{{ text_order_ref }}</td>
+		<td>{{ txn.order_id }}</td>
+	</tr>
+	<tr>
+		<td>{{ text_txn_ref }}</td>
+		<td>{{ txn.transaction_id }}</td>
+	</tr>
+	<tr>
+		<td>{{ text_txn_type }}</td>
+		<td>{{ txn.type }}</td>
+	</tr>
+	<tr>
+		<td>{{ text_txn_status }}</td>
+		<td>{{ txn.status }}</td> 
+	</tr>
+	<tr>
+		<td>{{ text_txn_amount }}</td>
+		<td>{{currency}}{{ txn.amount }}</td>
+	</tr>
+	<tr>
+		<td>{{ text_txn_actions }}</td>
+		<td>
+			{% if txn.type == 'authorization' %} 
+				<div>
+					{% if txn.status == 'Open' %}
+						<button class="btn_capture btn btn-primary" type="button" value="{{ txn.transaction_id }}"><i class="fa-solid fa-plus-circle"></i> {{ button_capture }}</button>
+						<span class="img_loading" style="display:none;">
+								<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</div>
+			{% elseif txn.type == 'capture' and txn.status == 'Completed'  %}
+				<div>
+					<div class="payment_button_wrapper">
+						<button class="btn_refund btn btn-primary" type="button" data-refund="{{ txn.amount }}" value="{{ txn.transaction_id }}"><i class="fa-solid fa-plus-circle"></i> {{button_refund}}</button>
+						<span class="img_loading" style="display:none;">
+							<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+						<button class="btn_partial_refund btn btn-primary" type="button" data-refund="{{ txn.amount }}" value="{{ txn.transaction_id }}"><i class="fa-solid fa-plus-circle"></i> {{button_refund_partial}}</button>
+						<span class="img_loading" style="display:none;">
+							<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+					</div>
+					<div class="refund_reason_container" style="display:none;">
+						<div class="refund_reason_box">
+							<div class="input-row partial_refund_row" style="display:none;">
+								<label>Amount</label>
+								<input type="text" class="refunded_amount form-control" data-max="{{ txn.amount }}">
+							</div>
+							<div class="input-row ">
+								<label>{{text_reason}}</label>
+								<textarea class="refund_reason form-control" id="refund_reason" name="message" rows="10" cols="25"></textarea>
+							</div>
+						</div>
+						<div class="reund_actions">
+							<button type="button" id="button-transaction" class="btn btn-primary refund_button"><i class="fa-solid fa-plus-circle"></i> Refund</button>
+							<button data-bs-toggle="tooltip" class="btn btn-light cancel_refund_button" aria-label="Back" data-bs-original-title="Back"><i class="fa-solid fa-reply"></i></button>
+							<span class="img_loading" style="display:none;">
+								<i class="fa fa-cog fa-spin fa-lg"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			{% elseif txn.type == 'refund' and txn.status == 'Partially Refunded'  %}
+                <input type="hidden" name="last_refund_transaction" class="last_refund_transaction" value="{{last_refund_transaction_id}}" data-refundedamount="{{total_refunded_amount}}">
+				<div>
+					<div class="payment_button_wrapper">
+						<button class="btn_partial_refund btn btn-primary" type="button" data-captureamount="{{capture_amount}}" value="{{ capture_id }}"><i class="fa-solid fa-plus-circle"></i> {{button_refund_partial}}</button>
+						<span class="img_loading" style="display:none;">
+							<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+					</div>
+					<div class="refund_reason_container" style="display:none;">
+						<div class="refund_reason_box">
+							<div class="input-row partial_refund_row" style="display:none;">
+								<label>Amount</label>
+								<input type="text" class="partial_refunded_amount form-control">
+							</div>
+							<div class="input-row ">
+								<label>{{text_reason}}</label>
+								<textarea class="refund_reason form-control" id="refund_reason" name="message" rows="10" cols="25"></textarea>
+							</div>
+						</div>
+						<div class="reund_actions">
+							<button type="button" id="button-transaction" class="btn btn-primary partial_refund_button"><i class="fa-solid fa-plus-circle"></i> Refund</button>
+							<button data-bs-toggle="tooltip" class="btn btn-light cancel_refund_button" aria-label="Back" data-bs-original-title="Back"><i class="fa-solid fa-reply"></i></button>
+							<span class="img_loading" style="display:none;">
+								<i class="fa fa-cog fa-spin fa-lg"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div>
+					{% if txn.type == 'payment' and txn.status == 'Completed'  %} 
+						<div>
+					<div class="payment_button_wrapper">
+						<button class="btn_refund btn btn-primary" type="button" data-refund="{{ txn.amount }}" value="{{ txn.transaction_id }}"><i class="fa-solid fa-plus-circle"></i> {{button_refund}}</button>
+						<span class="img_loading" style="display:none;">
+							<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+						<button class="btn_partial_refund btn btn-primary" type="button" data-refund="{{ txn.amount }}" value="{{ txn.transaction_id }}"><i class="fa-solid fa-plus-circle"></i> {{button_refund_partial}}</button>
+						<span class="img_loading" style="display:none;">
+							<i class="fa fa-cog fa-spin fa-lg"></i>
+						</span>
+					</div>
+					<div class="refund_reason_container" style="display:none;">
+						<div class="refund_reason_box">
+							<div class="input-row partial_refund_row" style="display:none;">
+								<label>Amount</label>
+								<input type="text" class="refunded_amount form-control" data-max="{{ txn.amount }}">
+							</div>
+							<div class="input-row ">
+								<label>{{text_reason}}</label>
+								<textarea class="refund_reason form-control" id="refund_reason" name="message" rows="10" cols="25"></textarea>
+							</div>
+						</div>
+						<div class="reund_actions">
+							<button type="button" id="button-transaction" class="btn btn-primary refund_button"><i class="fa-solid fa-plus-circle"></i> Refund</button>
+							<button data-bs-toggle="tooltip" class="btn btn-light cancel_refund_button" aria-label="Back" data-bs-original-title="Back"><i class="fa-solid fa-reply"></i></button>
+							<span class="img_loading" style="display:none;">
+								<i class="fa fa-cog fa-spin fa-lg"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</div>
+			{% endif %}
+			
+		</td>
+	</tr>
+</table>
+{% endfor %}
+
+
+<script type="text/javascript">
+
+		$("button.btn_capture").on('click', function (e) {
+		    if (!confirm('{{ text_confirm_capture }}')) {
+		        return;
+		    }
+
+		    var txn_id = $(this).val();
+		    var message_container = $('#simplify_transaction_msg_' + txn_id);
+		    $(this).next('.img_loading').show();
+
+		    var self = this; 
+
+		    $.ajax({
+		        type: 'POST',
+		        dataType: 'json',
+		        data: {'order_id': {{ order_id }}, 'txn_id': txn_id},
+		        url: 'index.php?route=extension/SimplifyCommerce/payment/simplifycommerce.capture&user_token={{ user_token }}',
+		        beforeSend: function () {
+		            message_container.hide();
+		            $(self).next('.img_loading').show();
+		            $(self).prop('disabled', true);
+		        },
+		        success: function (data) {
+		            message_container.text(data.msg).show();
+		            if (data.error === true) {
+		             	message_container.text("Error in capturing transaction").show();
+		                message_container.addClass('alert alert-danger');
+		                $(self).prop('disabled', false);
+		                setTimeout(function () {
+		                    location.reload(true); 
+		                }, 2000);
+		            } else {
+		                message_container.text("Transaction captured successfully").show();
+		                message_container.addClass('alert alert-success');
+		                setTimeout(function () {
+		                    location.reload(true); 
+		                }, 2000);
+		            }
+		        },
+		        error: $.proxy(function (data) {
+					message_container.text(data).show();
+					message_container.text("Error in capturing transaction").show();
+					message_container.addClass('alert alert-danger');
+					setTimeout(function () {
+							location.reload(true); 
+					}, 2000);
+				}, this),
+		        complete: function () {
+		            $('.img_loading').hide();
+		        }
+		    });
+		});
+
+
+
+	$("button.refund_button").on('click', function (e) {
+		if (!confirm('{{ text_confirm_refund }}')) {
+			return;
+		}
+
+		var txn_id = $('.btn_refund').val();
+		var message_container = $('#simplify_transaction_msg_' + txn_id);
+		var refundamount =  $('.btn_refund').data('refund');
+		var refundmsg = $('.refund_reason').val();
+		var userrefundAmount = $('.refunded_amount').val();
+		var amountToSend = userrefundAmount !== '' ? userrefundAmount : refundamount;
+		var maxrefund = $('.refunded_amount').data('max');
+		var maxrefund = maxrefund.toString();
+		var maxrefund = maxrefund.replace(/,/g, '');
+		var maxrefund = parseInt(maxrefund, 10);
+		
+		if (userrefundAmount <= maxrefund) {
+			$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			data: {'order_id': {{ order_id }}, 'txn_id': txn_id , 'amount': amountToSend , 'message': refundmsg ,'total_amount' : refundamount },
+			url: 'index.php?route=extension/SimplifyCommerce/payment/simplifycommerce.process_refund&user_token={{ user_token }}',
+			beforeSend: $.proxy(function () {
+				message_container.hide();
+				$('.img_loading').show();
+				$(this).prop('disabled', true);
+			}, this),
+			success: $.proxy(function (data) {
+				message_container.text(data.msg).show();
+				if (data.error === true) {
+					message_container.text("Error In Processing Refund").show();
+					message_container.addClass('alert alert-success');
+					$('.img_loading').hide();
+					$(this).prop('disabled', false);
+					setTimeout(function () {
+						location.reload(true); 
+					}, 2000);
+				} else {
+					$('.img_loading').hide();
+					message_container.addClass('alert alert-success');
+					message_container.text("Transaction refunded successfully").show();
+					setTimeout(function () {
+						location.reload(true); 
+					}, 2000);
+				}
+			}, this),
+			error: $.proxy(function (data) {
+				message_container.addClass('alert alert-danger');
+				message_container.text("Error In Processing Refund").show();
+				setTimeout(function () {
+						location.reload(true); 
+				}, 2000);
+			}, this),
+		});
+		} else{
+			message_container.addClass('alert alert-danger');
+            message_container.text("Refund Amount Exceeds Limit").show();
+            return;
+		}	
+
+	});
+
+	$("button.partial_refund_button").on('click', function (e) {
+		if (!confirm('{{ text_confirm_refund }}')) {
+			return;
+		}
+
+		var capture_id = $('.btn_partial_refund').val();
+		var message_container = $('#simplify_transaction_msg_' + last_refund_txn);
+		var refundmsg = $('.refund_reason').val();
+		var userrefundAmount = $('.partial_refunded_amount').val();
+		var totalCapturedAmount = $('.btn_partial_refund').data('captureamount');
+        var last_refund_txn  = $('.last_refund_transaction').val();
+        var total_refunded_amount  = $('.last_refund_transaction').data('refundedamount');
+	
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			data: {'order_id': {{ order_id }}, 'txn_id': capture_id , 'amount': userrefundAmount , 'message': refundmsg ,'total_capture_amount' : totalCapturedAmount, 'last_refund_txn' : last_refund_txn , 'total_refunded_amount' : total_refunded_amount },
+			url: 'index.php?route=extension/SimplifyCommerce/payment/simplifycommerce.process_Partialrefund&user_token={{ user_token }}',
+			beforeSend: $.proxy(function () {
+				message_container.hide();
+				$('.img_loading').show();
+				$(this).prop('disabled', true);
+			}, this),
+			success: $.proxy(function (data) {
+				message_container.text(data.msg).show();
+				if (data.error === true) {
+					$('.img_loading').hide();
+					$('#simplify_transaction_msg_' + last_refund_txn).addClass('alert alert-danger');
+					$('#simplify_transaction_msg_' + last_refund_txn).text("Error In Processing Refund").show();
+					$(this).prop('disabled', false);
+					setTimeout(function () {
+						location.reload(true); 
+					}, 2000);
+				} else {
+					$('#simplify_transaction_msg_' + last_refund_txn).addClass('alert alert-success');
+					$('#simplify_transaction_msg_' + last_refund_txn).text("Refunded Sucessfully").show();
+					$('.img_loading').hide();
+					setTimeout(function () {
+						location.reload(true); 
+					}, 2000);
+				}
+			}, this),
+			error: $.proxy(function (data) {
+				$('#simplify_transaction_msg_' + last_refund_txn).addClass('alert alert-danger');
+				$('#simplify_transaction_msg_' + last_refund_txn).text("Error In Processing Refund").show();
+				setTimeout(function () {
+						location.reload(true); 
+				}, 2000);
+			}, this),
+			complete: $.proxy(function () {
+				$('.img_loading').hide();
+			}, this)
+		});
+	});
+</script>

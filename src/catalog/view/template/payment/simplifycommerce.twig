@@ -1,0 +1,81 @@
+{#
+# Copyright (c) 2013-2023 Mastercard
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+{% if integration_model == 'modal' %}
+    <div class="form-horizontal" id="payment">
+        <div class="buttons">
+            <div class="pull-right">
+                <button id="simplify-button"
+                        data-color="{{ button_color }}"
+                        data-sc-key="{{ pub_key }}"
+                        data-name="{{ store_name }}"
+                        data-reference="{{ description }}"
+                        data-amount="{{ amount }}"
+                        data-operation="create.token"
+                        data-receipt="false"
+                        data-redirect-url="{{ redirect_url }}"
+                >{{ button_pay }}</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function initializeSimplify() {
+            if (typeof SimplifyCommerce == 'undefined') {
+                setTimeout(initializeSimplify, 500);
+                return;
+            }
+
+            SimplifyCommerce.hostedPayments();
+        }
+
+        initializeSimplify();
+    </script>
+{% else %}
+    <h3 class="simplify-embedded-payment-title text-left">{{ payment_title }}</h3>
+    <div class="simplify-embedded-error" style="display: none;"></div>
+    <div class="simplify-embedded-iframe-wrapper">
+        <iframe name="simplify_embedded"
+                data-color="{{ button_color }}"
+                data-sc-key="{{ pub_key }}"
+                data-name="{{ store_name }}"
+                data-reference="{{ description }}"
+                data-amount="{{ amount }}"
+                data-operation="create.token"
+                data-receipt="false"></iframe>
+    </div>
+    <form id="simplify_embedded_form" class="simplify-embedded-form" action="{{ redirect_url }}" method="post">
+        <input id="simplify_embedded_token" type="text" name="cardToken" value="">
+    </form>
+    <script>
+        function initializeSimplify() {
+            if (typeof SimplifyCommerce == 'undefined') {
+                setTimeout(initializeSimplify, 500);
+                return;
+            }
+
+            SimplifyCommerce.hostedPayments(function (response) {
+                if (response && response.cardToken) {
+                    $('#simplify_embedded_token').val(response.cardToken);
+                    $('#simplify_embedded_form').trigger('submit');
+                }
+            }, {
+                scKey: "{{ pub_key }}",
+                operation: "create.token"
+            });
+        }
+
+        initializeSimplify();
+    </script>
+{% endif %}

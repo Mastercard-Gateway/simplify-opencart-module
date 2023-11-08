@@ -1,2 +1,3 @@
-all :
-	@echo "Creating package: simplify-opencart-module.ocmod.zip" && git archive HEAD:src -o ./simplify-opencart-module.ocmod.zip
+all:
+	@echo "Creating package: SimplifyCommerce.ocmod.zip"
+	@git archive HEAD:src --format=zip -o SimplifyCommerce.ocmod.zip
